@@ -46,8 +46,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             top: 0,
             left: 0,
             right: 0,
-            height: MediaQuery.of(context).size.height *
-                0.5, // 👈 Ảnh chiếm 50% màn hình
+            height: MediaQuery.of(context).size.height * 0.5,
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
