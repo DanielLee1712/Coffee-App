@@ -30,16 +30,30 @@ class MyApp extends StatelessWidget {
         ),
         home: const LoginMain(),
         onGenerateRoute: (settings) {
-          switch (settings.name) {
-            case '/login':
-              return MaterialPageRoute(builder: (context) => const LoginMain());
-            case '/home':
-              return MaterialPageRoute(builder: (context) => const HomeMain());
-            case '/cart':
-              return MaterialPageRoute(builder: (context) => const CartPage());
-            default:
-              return MaterialPageRoute(builder: (context) => const LoginMain());
-          }
+          return PageRouteBuilder(
+            settings: settings,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              switch (settings.name) {
+                case '/login':
+                  return const LoginMain();
+                case '/home':
+                  return const HomeMain();
+                case '/cart':
+                  return const CartPage();
+                default:
+                  return const LoginMain();
+              }
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          );
         },
       ),
     );

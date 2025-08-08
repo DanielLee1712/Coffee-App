@@ -14,7 +14,7 @@ class HomeProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200, 
+      width: 250,
       margin: const EdgeInsets.only(right: 20),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -43,8 +43,8 @@ class HomeProductCard extends StatelessWidget {
                 Center(
                   child: Image.asset(
                     product.imagePath,
-                    width: 80,
-                    height: 80,
+                    width: 100,
+                    height: 100,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
@@ -121,7 +121,14 @@ class HomeProductCard extends StatelessWidget {
                     color: Colors.grey[600],
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 5),
+                Text(
+                  "Delivery Fee: ${product.deliveryFee}",
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 10),
                 Consumer<CartProvider>(
                   builder: (context, cartProvider, child) {
                     final int quantity =

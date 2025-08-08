@@ -12,7 +12,7 @@ class CartProvider extends ChangeNotifier {
       category: "Espresso",
     ),
     CartItem(
-      name: "Iced Cappuccino",
+      name: "Cappuccino đá",
       description: "Delicious creamy iced coffee",
       price: "US \$20.00",
       deliveryFee: "US \$1",
@@ -20,7 +20,7 @@ class CartProvider extends ChangeNotifier {
       category: "Cappuccino",
     ),
     CartItem(
-      name: "Hot Cappuccino",
+      name: "Cappuccino nóng",
       description: "Delicious hot creamy coffee",
       price: "US \$20.00",
       deliveryFee: "US \$1",
@@ -28,7 +28,7 @@ class CartProvider extends ChangeNotifier {
       category: "Cappuccino",
     ),
     CartItem(
-      name: "Iced Latte",
+      name: "Latte đá",
       description: "Smooth espresso with chilled milk",
       price: "US \$18.00",
       deliveryFee: "US \$3",
@@ -36,7 +36,7 @@ class CartProvider extends ChangeNotifier {
       category: "Latte",
     ),
     CartItem(
-      name: "Hot Latte",
+      name: "Latte nóng",
       description: "Warm and creamy coffee",
       price: "US \$18.00",
       deliveryFee: "US \$3",
@@ -44,7 +44,7 @@ class CartProvider extends ChangeNotifier {
       category: "Latte",
     ),
     CartItem(
-      name: "Iced Espresso",
+      name: "Espresso đá",
       description: "Strong and refreshing",
       price: "US \$18.00",
       deliveryFee: "US \$3",
@@ -52,7 +52,7 @@ class CartProvider extends ChangeNotifier {
       category: "Espresso",
     ),
     CartItem(
-      name: "Hot Espresso",
+      name: "Espresso nóng",
       description: "Pure concentrated espresso flavor",
       price: "US \$18.00",
       deliveryFee: "US \$3",
@@ -60,7 +60,7 @@ class CartProvider extends ChangeNotifier {
       category: "Espresso",
     ),
     CartItem(
-      name: "Black Coffee",
+      name: "Cà phê đen",
       description: "Pure brewed coffee, no milk",
       price: "US \$10.00",
       deliveryFee: "US \$1",
@@ -68,31 +68,31 @@ class CartProvider extends ChangeNotifier {
       category: "Espresso",
     ),
     CartItem(
-      name: "Vietnamese Iced Milk Coffee",
+      name: "Nâu đá",
       description: "Chilled, creamy, and energizing",
       price: "US \$22.00",
       deliveryFee: "US \$3",
-      imagePath: "assets/images/Vietnamese_Iced_Milk_Coffee.jpeg",
+      imagePath: "assets/images/Iced_Milk_Coffee.jpeg",
       category: "Vietnamese Coffee",
     ),
     CartItem(
-      name: "Vietnamese Hot Milk Coffee",
-      description: "Traditional Vietnamese-style hot coffee",
+      name: "Nâu nóng",
+      description: "Traditional style hot coffee",
       price: "US \$22.00",
       deliveryFee: "US \$2",
-      imagePath: "assets/images/Vietnamese_Hot_Milk_Coffee.jpeg",
+      imagePath: "assets/images/Hot_Milk_Coffee.jpeg",
       category: "Vietnamese Coffee",
     ),
     CartItem(
-      name: "Iced Milk with a Splash of Coffee",
-      description: "Creamy and light Vietnamese-style drink",
+      name: "Cà phê sữa đá",
+      description: "Creamy and light style drink",
       price: "US \$20.00",
       deliveryFee: "US \$1",
       imagePath: "assets/images/Iced_Milk_with_a_Splash_of_Coffee.jpeg",
       category: "Latte",
     ),
     CartItem(
-      name: "Hot Milk with a Splash of Coffee",
+      name: "Cà phê sữa nóng",
       description: "Creamy, smooth, and lightly caffeinated",
       price: "US \$20.00",
       deliveryFee: "US \$1",
@@ -100,7 +100,7 @@ class CartProvider extends ChangeNotifier {
       category: "Latte",
     ),
     CartItem(
-      name: "Iced Americano",
+      name: "Americano đá",
       description: "Bold, smooth, and refreshing",
       price: "US \$17.00",
       deliveryFee: "US \$3",
@@ -108,7 +108,7 @@ class CartProvider extends ChangeNotifier {
       category: "Americano",
     ),
     CartItem(
-      name: "Hot Americano",
+      name: "Americano nóng",
       description: "Espresso diluted with hot water",
       price: "US \$17.00",
       deliveryFee: "US \$3",
@@ -116,7 +116,7 @@ class CartProvider extends ChangeNotifier {
       category: "Americano",
     ),
     CartItem(
-      name: "Iced Caramel Macchiato",
+      name: "Caramel Macchiato đá",
       description: "Sweet, creamy, and refreshing",
       price: "US \$16.00",
       deliveryFee: "US \$2",
@@ -124,7 +124,7 @@ class CartProvider extends ChangeNotifier {
       category: "Latte",
     ),
     CartItem(
-      name: "Hot Caramel Macchiato",
+      name: "Caramel Macchiato nóng",
       description: "Warm, sweet, and creamy",
       price: "US \$16.00",
       deliveryFee: "US \$2",
@@ -132,7 +132,7 @@ class CartProvider extends ChangeNotifier {
       category: "Latte",
     ),
     CartItem(
-      name: "Cold Brew Milk Coffee",
+      name: "Cold Brew sữa tươi",
       description: "Chilled, mellow, and refreshing",
       price: "US \$24.00",
       deliveryFee: "US \$3",
@@ -140,7 +140,7 @@ class CartProvider extends ChangeNotifier {
       category: "Cold Brew",
     ),
     CartItem(
-      name: "Black Cold Brew",
+      name: "Cold Brew truyền thống",
       description: "Bold, smooth, and naturally sweet",
       price: "US \$24.00",
       deliveryFee: "US \$3",
@@ -164,11 +164,7 @@ class CartProvider extends ChangeNotifier {
   }
 
   double get totalAmount {
-    double total = 0.0;
-    for (var item in _currentCartItems) {
-      total += item.totalPrice;
-    }
-    return total + totalDeliveryFee;
+    return subtotal + totalDeliveryFee;
   }
 
   double get totalDeliveryFee {

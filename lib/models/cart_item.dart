@@ -1,13 +1,10 @@
-import 'package:flutter/material.dart';
-
 class CartItem {
   final String name;
   final String description;
   final String price;
   final String deliveryFee;
   final String imagePath;
-  final String category; // Added category property
-  // Removed isSelected as all items in cart are now implicitly selected
+  final String category;
   int quantity;
 
   CartItem({
@@ -29,6 +26,6 @@ class CartItem {
   }
 
   double get totalPrice {
-    return (priceValue * quantity) + deliveryFeeValue;
+    return (priceValue * quantity);
   }
 }
