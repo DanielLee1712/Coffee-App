@@ -14,7 +14,7 @@ class HomeProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200, // Tăng chiều rộng từ 180 lên 200
+      width: 200, 
       margin: const EdgeInsets.only(right: 20),
       decoration: BoxDecoration(
         color: Colors.white,

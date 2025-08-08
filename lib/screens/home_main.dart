@@ -19,10 +19,8 @@ class HomeMain extends StatelessWidget {
     final cartProvider = context.read<CartProvider>();
     return Consumer<HomeMainProvider>(
       builder: (context, homeProvider, child) {
-        final String selectedCategory =
-            homeProvider.categories[homeProvider.selectedCategoryIndex];
-        final List<CartItem> filteredProducts = cartProvider
-            .allAvailableProducts
+        final String selectedCategory = homeProvider.categories[homeProvider.selectedCategoryIndex];
+        final List<CartItem> filteredProducts = cartProvider.allAvailableProducts
             .where((item) => item.category == selectedCategory)
             .toList();
 
