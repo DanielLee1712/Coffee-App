@@ -27,16 +27,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _quantity =
-        context.read<CartProvider>().getItemQuantity(widget.product.name);
+    _quantity = context
+        .read<CartProvider>()
+        .getItemQuantityBySize(widget.product.name, _selectedSize);
     if (_quantity == 0) {
       _quantity = 1;
     }
   }
 
+  double _unitPriceForSize() {
+    final base = widget.product.priceValue;
+    if (_selectedSize == 'S') return base - 2.0;
+    if (_selectedSize == 'L') return base + 2.0;
+    return base;
+  }
+
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    final unitPrice = _unitPriceForSize();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -118,7 +127,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Drag indicator
                       Center(
                         child: Container(
                           width: 40,
@@ -244,18 +252,33 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           _buildSizeButton('S', _selectedSize == 'S', (value) {
                             setState(() {
                               _selectedSize = value;
+                              _quantity = context
+                                  .read<CartProvider>()
+                                  .getItemQuantityBySize(
+                                      widget.product.name, _selectedSize);
+                              if (_quantity == 0) _quantity = 1;
                             });
                           }),
                           const SizedBox(width: 10),
                           _buildSizeButton('M', _selectedSize == 'M', (value) {
                             setState(() {
                               _selectedSize = value;
+                              _quantity = context
+                                  .read<CartProvider>()
+                                  .getItemQuantityBySize(
+                                      widget.product.name, _selectedSize);
+                              if (_quantity == 0) _quantity = 1;
                             });
                           }),
                           const SizedBox(width: 10),
                           _buildSizeButton('L', _selectedSize == 'L', (value) {
                             setState(() {
                               _selectedSize = value;
+                              _quantity = context
+                                  .read<CartProvider>()
+                                  .getItemQuantityBySize(
+                                      widget.product.name, _selectedSize);
+                              if (_quantity == 0) _quantity = 1;
                             });
                           }),
                           const Spacer(),
@@ -299,7 +322,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                               ),
                               Text(
-                                'US \$${(widget.product.priceValue * _quantity).toStringAsFixed(2)}',
+                                'US \$${(unitPrice * _quantity).toStringAsFixed(2)}',
                                 style: const TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
@@ -310,12 +333,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              cartProvider.updateCartItemQuantity(
-                                  widget.product, _quantity);
+                              cartProvider.updateCartItemQuantityBySize(
+                                  widget.product, _quantity, _selectedSize);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                      'Đã thêm $_quantity ${widget.product.name} vào giỏ hàng!'),
+                                      'Đã thêm $_quantity ${widget.product.name} (Size $_selectedSize) vào giỏ hàng!'),
                                   backgroundColor: const Color(0xFFB8860B),
                                   duration: const Duration(seconds: 2),
                                 ),

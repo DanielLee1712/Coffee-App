@@ -10,6 +10,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$2",
       imagePath: "assets/images/Dalgona_Coffee.jpeg",
       category: "Espresso",
+      size: 'M',
     ),
     CartItem(
       name: "Cappuccino đá",
@@ -18,6 +19,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$1",
       imagePath: "assets/images/Iced_Cappuccino.jpeg",
       category: "Cappuccino",
+      size: 'M',
     ),
     CartItem(
       name: "Cappuccino nóng",
@@ -26,6 +28,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$1",
       imagePath: "assets/images/Hot_Cappuccino.jpeg",
       category: "Cappuccino",
+      size: 'M',
     ),
     CartItem(
       name: "Latte đá",
@@ -34,6 +37,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$3",
       imagePath: "assets/images/Iced_Latte.jpeg",
       category: "Latte",
+      size: 'M',
     ),
     CartItem(
       name: "Latte nóng",
@@ -42,6 +46,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$3",
       imagePath: "assets/images/Hot_Latte.jpeg",
       category: "Latte",
+      size: 'M',
     ),
     CartItem(
       name: "Espresso đá",
@@ -50,6 +55,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$3",
       imagePath: "assets/images/Iced_Espresso.jpeg",
       category: "Espresso",
+      size: 'M',
     ),
     CartItem(
       name: "Espresso nóng",
@@ -58,6 +64,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$3",
       imagePath: "assets/images/Hot_Latte.jpeg",
       category: "Espresso",
+      size: 'M',
     ),
     CartItem(
       name: "Cà phê đen",
@@ -66,6 +73,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$1",
       imagePath: "assets/images/Black_Coffee.jpeg",
       category: "Espresso",
+      size: 'M',
     ),
     CartItem(
       name: "Nâu đá",
@@ -74,6 +82,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$3",
       imagePath: "assets/images/Iced_Milk_Coffee.jpeg",
       category: "Vietnamese Coffee",
+      size: 'M',
     ),
     CartItem(
       name: "Nâu nóng",
@@ -82,6 +91,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$2",
       imagePath: "assets/images/Hot_Milk_Coffee.jpeg",
       category: "Vietnamese Coffee",
+      size: 'M',
     ),
     CartItem(
       name: "Cà phê sữa đá",
@@ -90,6 +100,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$1",
       imagePath: "assets/images/Iced_Milk_with_a_Splash_of_Coffee.jpeg",
       category: "Latte",
+      size: 'M',
     ),
     CartItem(
       name: "Cà phê sữa nóng",
@@ -98,6 +109,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$1",
       imagePath: "assets/images/Hot_Milk_with_a_Splash_of_Coffee.jpeg",
       category: "Latte",
+      size: 'M',
     ),
     CartItem(
       name: "Americano đá",
@@ -106,6 +118,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$3",
       imagePath: "assets/images/Iced_Americano.jpeg",
       category: "Americano",
+      size: 'M',
     ),
     CartItem(
       name: "Americano nóng",
@@ -114,6 +127,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$3",
       imagePath: "assets/images/Hot_Americano.jpeg",
       category: "Americano",
+      size: 'M',
     ),
     CartItem(
       name: "Caramel Macchiato đá",
@@ -122,6 +136,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$2",
       imagePath: "assets/images/Iced_Caramel_Macchiato.jpeg",
       category: "Latte",
+      size: 'M',
     ),
     CartItem(
       name: "Caramel Macchiato nóng",
@@ -130,6 +145,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$2",
       imagePath: "assets/images/Hot_Caramel_Macchiato.jpeg",
       category: "Latte",
+      size: 'M',
     ),
     CartItem(
       name: "Cold Brew sữa tươi",
@@ -138,6 +154,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$3",
       imagePath: "assets/images/Cold_Brew_Milk_Coffee.jpeg",
       category: "Cold Brew",
+      size: 'M',
     ),
     CartItem(
       name: "Cold Brew truyền thống",
@@ -146,6 +163,7 @@ class CartProvider extends ChangeNotifier {
       deliveryFee: "US \$3",
       imagePath: "assets/images/Black_Cold_Brew.jpeg",
       category: "Cold Brew",
+      size: 'M',
     ),
   ];
 
@@ -181,7 +199,7 @@ class CartProvider extends ChangeNotifier {
   double get subtotal {
     double total = 0.0;
     for (var item in _currentCartItems) {
-      total += (item.priceValue * item.quantity);
+      total += item.totalPrice; // dùng giá theo size
     }
     return total;
   }
@@ -203,9 +221,10 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
+  // Thêm vào giỏ theo name + size
   void addToCart(CartItem newItem) {
     final existingItemIndex = _currentCartItems.indexWhere(
-      (item) => item.name == newItem.name,
+      (item) => item.name == newItem.name && item.size == newItem.size,
     );
 
     if (existingItemIndex != -1) {
@@ -218,15 +237,18 @@ class CartProvider extends ChangeNotifier {
         deliveryFee: newItem.deliveryFee,
         imagePath: newItem.imagePath,
         category: newItem.category,
+        size: newItem.size,
         quantity: 1,
       ));
     }
     notifyListeners();
   }
 
-  void updateCartItemQuantity(CartItem itemToUpdate, int newQuantity) {
+  // Cập nhật số lượng theo name + size
+  void updateCartItemQuantityBySize(
+      CartItem itemToUpdate, int newQuantity, String size) {
     final existingItemIndex = _currentCartItems.indexWhere(
-      (item) => item.name == itemToUpdate.name,
+      (item) => item.name == itemToUpdate.name && item.size == size,
     );
 
     if (newQuantity <= 0) {
@@ -244,11 +266,17 @@ class CartProvider extends ChangeNotifier {
           deliveryFee: itemToUpdate.deliveryFee,
           imagePath: itemToUpdate.imagePath,
           category: itemToUpdate.category,
+          size: size,
           quantity: newQuantity,
         ));
       }
     }
     notifyListeners();
+  }
+
+  // Giữ lại hàm cũ để không phá chỗ khác (mặc định size M)
+  void updateCartItemQuantity(CartItem itemToUpdate, int newQuantity) {
+    updateCartItemQuantityBySize(itemToUpdate, newQuantity, 'M');
   }
 
   void removeItem(int index) {
@@ -265,9 +293,10 @@ class CartProvider extends ChangeNotifier {
 
   List<CartItem> get allAvailableProducts => _allProducts;
 
-  int getItemQuantity(String productName) {
+  // Số lượng theo name + size
+  int getItemQuantityBySize(String productName, String size) {
     final item = _currentCartItems.firstWhere(
-      (item) => item.name == productName,
+      (item) => item.name == productName && item.size == size,
       orElse: () => CartItem(
         name: '',
         description: '',
@@ -275,10 +304,26 @@ class CartProvider extends ChangeNotifier {
         deliveryFee: '',
         imagePath: '',
         category: '',
+        size: size,
         quantity: 0,
       ),
     );
     return item.quantity;
+  }
+
+  // Tổng số lượng của tất cả size theo name (nếu cần)
+  int getItemQuantity(String productName) {
+    int total = 0;
+    for (var item in _currentCartItems) {
+      if (item.name == productName) total += item.quantity;
+    }
+    return total;
+  }
+
+  int getCartItemIndexBySize(String productName, String size) {
+    return _currentCartItems.indexWhere(
+      (item) => item.name == productName && item.size == size,
+    );
   }
 
   int getCartItemIndex(String productName) {

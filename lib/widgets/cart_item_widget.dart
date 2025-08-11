@@ -25,7 +25,7 @@ class CartItemWidget extends StatelessWidget {
         final item = cartProvider.cartItems[index];
 
         return Slidable(
-          key: ValueKey(item.name + index.toString()),
+          key: ValueKey(item.name + item.size + index.toString()),
           endActionPane: ActionPane(
             motion: const ScrollMotion(),
             children: [
@@ -34,7 +34,8 @@ class CartItemWidget extends StatelessWidget {
                   cartProvider.removeItem(index);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Đã xóa "${item.name}" khỏi giỏ hàng!'),
+                      content: Text(
+                          'Đã xóa "${item.name} (Size ${item.size})" khỏi giỏ hàng!'),
                       backgroundColor: Colors.red,
                       duration: const Duration(seconds: 2),
                     ),
@@ -77,7 +78,7 @@ class CartItemWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(item.name,
+                      Text('${item.name} • Size ${item.size}',
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 4),
@@ -85,9 +86,11 @@ class CartItemWidget extends StatelessWidget {
                           style:
                               TextStyle(fontSize: 13, color: Colors.grey[700])),
                       const SizedBox(height: 4),
-                      Text(item.price,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)),
+                      Text(
+                        'US \$${item.unitPrice.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
                       const SizedBox(height: 6),
                       Row(
                         children: [

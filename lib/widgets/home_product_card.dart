@@ -14,6 +14,9 @@ class HomeProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Mặc định thẻ ở Home hiển thị giá M (giá gốc)
+    const defaultSize = 'M';
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -134,11 +137,12 @@ class HomeProductCard extends StatelessWidget {
                   const SizedBox(height: 15),
                   Consumer<CartProvider>(
                     builder: (context, cartProvider, child) {
-                      final int quantity =
-                          cartProvider.getItemQuantity(product.name);
+                      final int quantity = cartProvider.getItemQuantityBySize(
+                          product.name, defaultSize);
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // Hiển thị giá gốc (M)
                           Text(
                             product.price,
                             style: const TextStyle(
@@ -150,11 +154,21 @@ class HomeProductCard extends StatelessWidget {
                           if (quantity == 0)
                             GestureDetector(
                               onTap: () {
-                                cartProvider.addToCart(product);
+                                // Thêm size M
+                                cartProvider.addToCart(CartItem(
+                                  name: product.name,
+                                  description: product.description,
+                                  price: product.price,
+                                  deliveryFee: product.deliveryFee,
+                                  imagePath: product.imagePath,
+                                  category: product.category,
+                                  size: defaultSize,
+                                  quantity: 1,
+                                ));
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                        'Đã thêm ${product.name} vào giỏ hàng!'),
+                                        'Đã thêm ${product.name} (Size $defaultSize) vào giỏ hàng!'),
                                     backgroundColor: const Color(0xFFB8860B),
                                     duration: const Duration(seconds: 2),
                                   ),
@@ -178,18 +192,19 @@ class HomeProductCard extends StatelessWidget {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    final itemIndex = cartProvider
-                                        .getCartItemIndex(product.name);
+                                    final itemIndex =
+                                        cartProvider.getCartItemIndexBySize(
+                                            product.name, defaultSize);
                                     if (itemIndex != -1) {
                                       cartProvider.decreaseQuantity(itemIndex);
-                                      if (cartProvider
-                                              .getItemQuantity(product.name) ==
+                                      if (cartProvider.getItemQuantityBySize(
+                                              product.name, defaultSize) ==
                                           0) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
                                             content: Text(
-                                                'Đã xóa ${product.name} khỏi giỏ hàng!'),
+                                                'Đã xóa ${product.name} (Size $defaultSize) khỏi giỏ hàng!'),
                                             backgroundColor: Colors.red,
                                             duration:
                                                 const Duration(seconds: 2),
@@ -225,11 +240,20 @@ class HomeProductCard extends StatelessWidget {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    cartProvider.addToCart(product);
+                                    cartProvider.addToCart(CartItem(
+                                      name: product.name,
+                                      description: product.description,
+                                      price: product.price,
+                                      deliveryFee: product.deliveryFee,
+                                      imagePath: product.imagePath,
+                                      category: product.category,
+                                      size: defaultSize,
+                                      quantity: 1,
+                                    ));
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                            'Đã thêm ${product.name} vào giỏ hàng!'),
+                                            'Đã thêm ${product.name} (Size $defaultSize) vào giỏ hàng!'),
                                         backgroundColor:
                                             const Color(0xFFB8860B),
                                         duration: const Duration(seconds: 2),

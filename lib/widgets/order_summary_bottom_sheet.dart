@@ -1,4 +1,5 @@
 import 'package:first_ui/providers/cart_provider.dart';
+import 'package:first_ui/providers/home_main_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -12,6 +13,7 @@ void showOrderSummaryBottomSheet(BuildContext context) {
       return Consumer<CartProvider>(
         builder: (context, provider, _) {
           final currentCartItems = provider.cartItems;
+
           return Container(
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -21,6 +23,7 @@ void showOrderSummaryBottomSheet(BuildContext context) {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Header
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -36,6 +39,8 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                   ],
                 ),
                 const Divider(),
+
+                // Items (limited height)
                 Container(
                   constraints: BoxConstraints(
                     maxHeight: MediaQuery.of(context).size.height * 0.4,
@@ -45,8 +50,9 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                     itemCount: currentCartItems.length,
                     itemBuilder: (context, index) {
                       final item = currentCartItems[index];
+
                       return Slidable(
-                        key: ValueKey(item.name + index.toString()),
+                        key: ValueKey(item.name + item.size + index.toString()),
                         endActionPane: ActionPane(
                           motion: const ScrollMotion(),
                           children: [
@@ -56,7 +62,7 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                        'Đã xóa "${item.name}" khỏi giỏ hàng!'),
+                                        'Đã xóa "${item.name} (Size ${item.size})" khỏi giỏ hàng!'),
                                     backgroundColor: Colors.red,
                                     duration: const Duration(seconds: 2),
                                   ),
@@ -81,12 +87,12 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                             children: [
                               Image.asset(
                                 item.imagePath,
-                                width: 50,
-                                height: 50,
+                                width: 40,
+                                height: 40,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Container(
-                                    width: 60,
-                                    height: 60,
+                                    width: 40,
+                                    height: 40,
                                     color: Colors.grey[300],
                                     child: const Icon(Icons.coffee),
                                   );
@@ -97,37 +103,37 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(item.name,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 13.0)),
-                                    Text('Price: ${item.price}'),
+                                    Text(
+                                      '${item.name} • Size ${item.size}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13.0),
+                                    ),
+                                    Text(
+                                        'Price: US \$${item.unitPrice.toStringAsFixed(2)}'),
                                     Text('Delivery fee: ${item.deliveryFee}',
                                         style: const TextStyle(
                                             color: Colors.orange)),
                                     const SizedBox(height: 4.0),
                                     Row(
                                       children: [
-                                        const Text('Quantity: '),
+                                        const Text('Quantity:'),
                                         Selector<CartProvider, int>(
-                                          selector: (_, provider) => provider
-                                              .cartItems[index].quantity,
+                                          selector: (_, p) =>
+                                              p.cartItems[index].quantity,
                                           builder: (context, quantity, _) {
                                             return Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 IconButton(
-                                                  onPressed: () {
-                                                    provider.decreaseQuantity(
-                                                        index);
-                                                  },
+                                                  onPressed: () => provider
+                                                      .decreaseQuantity(index),
                                                   icon: const Icon(Icons.remove,
                                                       size: 16),
                                                   constraints:
                                                       const BoxConstraints(
-                                                    minWidth: 28,
-                                                    minHeight: 28,
-                                                  ),
+                                                          minWidth: 20,
+                                                          minHeight: 20),
                                                   padding: EdgeInsets.zero,
                                                 ),
                                                 Container(
@@ -144,26 +150,22 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                                                             4),
                                                   ),
                                                   child: Text(
-                                                    "$quantity",
+                                                    '$quantity',
                                                     style: const TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
                                                 ),
                                                 IconButton(
-                                                  onPressed: () {
-                                                    provider.increaseQuantity(
-                                                        index);
-                                                  },
+                                                  onPressed: () => provider
+                                                      .increaseQuantity(index),
                                                   icon: const Icon(Icons.add,
                                                       size: 16),
                                                   constraints:
                                                       const BoxConstraints(
-                                                    minWidth: 28,
-                                                    minHeight: 28,
-                                                  ),
+                                                          minWidth: 20,
+                                                          minHeight: 20),
                                                   padding: EdgeInsets.zero,
                                                 ),
                                               ],
@@ -176,11 +178,12 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                                 ),
                               ),
                               Text(
-                                '\$${(item.priceValue * item.quantity).toStringAsFixed(2)}',
+                                'US \$${(item.totalPrice).toStringAsFixed(2)}',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14.0,
-                                    color: Colors.brown),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12.0,
+                                  color: Colors.brown,
+                                ),
                               ),
                             ],
                           ),
@@ -189,7 +192,10 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                     },
                   ),
                 ),
+
                 const Divider(),
+
+                // Totals
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -211,48 +217,69 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                   children: [
                     const Text('Total:',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('US \$${provider.totalAmount.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.brown)),
+                    Text(
+                      'US \$${provider.totalAmount.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.brown),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20.0),
+
+                // Order button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: currentCartItems.isEmpty
                         ? null
                         : () {
-                            Navigator.of(context).pop();
+                            // Mở dialog trên bottom sheet (không pop sheet trước)
                             showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
                                 title: const Text('Confirm order'),
                                 content: Text(
-                                    'Bạn có chắc muốn đặt ${provider.totalQuantityInCart} món với tổng US \$${provider.totalAmount.toStringAsFixed(2)}?'),
+                                  'Bạn có chắc muốn đặt ${provider.totalQuantityInCart} món với tổng US \$${provider.totalAmount.toStringAsFixed(2)}?',
+                                ),
                                 actions: [
+                                  // Cancel → chỉ đóng dialog, bottom sheet vẫn mở
                                   TextButton(
-                                    onPressed: () => Navigator.pop(context),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // close dialog only
+                                    },
                                     child: const Text('Cancel'),
                                   ),
+
+                                  // Confirm → đóng dialog + bottom sheet → set bottom=Home → về '/home' → reset cart
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.brown),
                                     onPressed: () {
-                                      Navigator.of(context).pop();
-                                      provider.resetAfterOrder();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        backgroundColor: Colors.green,
-                                        content: Row(
-                                          children: [
-                                            Icon(Icons.check_circle,
-                                                color: Colors.white),
-                                            SizedBox(width: 8),
-                                            Text('Order confirmed'),
-                                          ],
-                                        ),
-                                      ));
+                                      // Lấy sẵn provider & rootNav TRƯỚC khi pop để tránh context deactivated
+                                      final cartProvider =
+                                          context.read<CartProvider>();
+                                      final homeProvider =
+                                          context.read<HomeMainProvider>();
+                                      final rootNav = Navigator.of(context,
+                                          rootNavigator: true);
+
+                                      // *** ĐẶT BOTTOM VỀ HOME TRƯỚC KHI ĐIỀU HƯỚNG ***
+                                      homeProvider.setSelectedBottomNavIndex(0);
+
+                                      // 1) Đóng dialog
+                                      rootNav.pop();
+                                      // 2) Đóng bottom sheet
+                                      rootNav.pop();
+
+                                      // 3) Điều hướng đúng route HOME của app: '/home'
+                                      rootNav.pushNamedAndRemoveUntil(
+                                          '/home', (route) => false);
+
+                                      // 4) Reset cart SAU khi về Home (tránh side-effect không mong muốn)
+                                      Future.microtask(() {
+                                        cartProvider.resetAfterOrder();
+                                      });
                                     },
                                     child: const Text('Confirm',
                                         style: TextStyle(color: Colors.white)),
