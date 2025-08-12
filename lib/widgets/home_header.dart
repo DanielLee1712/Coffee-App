@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:first_ui/providers/home_main_provider.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({Key? key}) : super(key: key);
@@ -8,16 +10,21 @@ class HomeHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: const Color(0xFFB8860B),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const Icon(
-            Icons.grid_view,
-            color: Colors.white,
-            size: 24,
+        GestureDetector(
+          onTap: () {
+            context.read<HomeMainProvider>().toggleMenu();
+          },
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFB8860B),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(
+              Icons.grid_view,
+              color: Colors.white,
+              size: 24,
+            ),
           ),
         ),
         CircleAvatar(

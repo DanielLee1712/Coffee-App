@@ -14,7 +14,6 @@ class HomeProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Mặc định thẻ ở Home hiển thị giá M (giá gốc)
     const defaultSize = 'M';
 
     return GestureDetector(
@@ -142,7 +141,6 @@ class HomeProductCard extends StatelessWidget {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Hiển thị giá gốc (M)
                           Text(
                             product.price,
                             style: const TextStyle(
@@ -154,7 +152,6 @@ class HomeProductCard extends StatelessWidget {
                           if (quantity == 0)
                             GestureDetector(
                               onTap: () {
-                                // Thêm size M
                                 cartProvider.addToCart(CartItem(
                                   name: product.name,
                                   description: product.description,

@@ -1,14 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:first_ui/providers/password_visibility_provider.dart';
 import 'package:first_ui/providers/cart_provider.dart';
 import 'package:first_ui/providers/home_main_provider.dart';
+
 import 'package:first_ui/screens/login_main.dart';
 import 'package:first_ui/screens/cart_main.dart';
 import 'package:first_ui/screens/home_main.dart';
+import 'package:first_ui/screens/menu_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
+}
+
+class NoTransitionsBuilder extends PageTransitionsBuilder {
+  const NoTransitionsBuilder();
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return child;
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -26,35 +44,27 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Coffee App',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: NoTransitionsBuilder(),
+              TargetPlatform.iOS: NoTransitionsBuilder(),
+              TargetPlatform.macOS: NoTransitionsBuilder(),
+              TargetPlatform.linux: NoTransitionsBuilder(),
+              TargetPlatform.windows: NoTransitionsBuilder(),
+              TargetPlatform.fuchsia: NoTransitionsBuilder(),
+            },
+          ),
         ),
-        home: const LoginMain(),
-        onGenerateRoute: (settings) {
-          return PageRouteBuilder(
-            settings: settings,
-            pageBuilder: (context, animation, secondaryAnimation) {
-              switch (settings.name) {
-                case '/login':
-                  return const LoginMain();
-                case '/home':
-                  return const HomeMain();
-                case '/cart':
-                  return const CartPage();
-                default:
-                  return const LoginMain();
-              }
-            },
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            },
-            transitionDuration: Duration.zero,
-            reverseTransitionDuration: Duration.zero,
-          );
+        initialRoute: '/login',
+        routes: {
+          '/login': (_) => const LoginMain(),
+          '/home': (_) => const HomeMain(),
+          '/cart': (_) => const CartPage(),
+          '/menu': (_) => const MenuScreen(),
+          '/menu_screens': (_) => const MenuScreen(),
         },
+        onUnknownRoute: (_) =>
+            MaterialPageRoute(builder: (_) => const LoginMain()),
       ),
     );
   }

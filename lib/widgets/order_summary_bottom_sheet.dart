@@ -23,7 +23,6 @@ void showOrderSummaryBottomSheet(BuildContext context) {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Header
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -233,7 +232,6 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                     onPressed: currentCartItems.isEmpty
                         ? null
                         : () {
-                            // Mở dialog trên bottom sheet (không pop sheet trước)
                             showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
@@ -242,21 +240,16 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                                   'Bạn có chắc muốn đặt ${provider.totalQuantityInCart} món với tổng US \$${provider.totalAmount.toStringAsFixed(2)}?',
                                 ),
                                 actions: [
-                                  // Cancel → chỉ đóng dialog, bottom sheet vẫn mở
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // close dialog only
+                                      Navigator.of(context).pop();
                                     },
                                     child: const Text('Cancel'),
                                   ),
-
-                                  // Confirm → đóng dialog + bottom sheet → set bottom=Home → về '/home' → reset cart
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.brown),
                                     onPressed: () {
-                                      // Lấy sẵn provider & rootNav TRƯỚC khi pop để tránh context deactivated
                                       final cartProvider =
                                           context.read<CartProvider>();
                                       final homeProvider =
@@ -264,19 +257,14 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                                       final rootNav = Navigator.of(context,
                                           rootNavigator: true);
 
-                                      // *** ĐẶT BOTTOM VỀ HOME TRƯỚC KHI ĐIỀU HƯỚNG ***
                                       homeProvider.setSelectedBottomNavIndex(0);
 
-                                      // 1) Đóng dialog
                                       rootNav.pop();
-                                      // 2) Đóng bottom sheet
                                       rootNav.pop();
 
-                                      // 3) Điều hướng đúng route HOME của app: '/home'
                                       rootNav.pushNamedAndRemoveUntil(
                                           '/home', (route) => false);
 
-                                      // 4) Reset cart SAU khi về Home (tránh side-effect không mong muốn)
                                       Future.microtask(() {
                                         cartProvider.resetAfterOrder();
                                       });
