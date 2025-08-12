@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:first_ui/providers/cart_provider.dart';
 import 'package:first_ui/models/cart_item.dart';
 import 'package:first_ui/widgets/home_bottom_navigation_bar.dart';
+import 'package:first_ui/screens/product_detail_screen.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({Key? key}) : super(key: key);
@@ -84,7 +85,14 @@ class MenuScreen extends StatelessWidget {
     final int quantity = cartProvider.getItemQuantity(product.name);
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => ProductDetailScreen(product: product),
+            settings: const RouteSettings(name: '/product_detail'),
+          ),
+        );
+      },
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
