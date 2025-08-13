@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/password_visibility_provider.dart';
+import '../provider/password_visibility_provider.dart';
 
 class HidePassword extends StatefulWidget {
   const HidePassword({Key? key}) : super(key: key);

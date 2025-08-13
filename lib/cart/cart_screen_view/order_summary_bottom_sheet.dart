@@ -1,5 +1,5 @@
-import 'package:first_ui/providers/cart_provider.dart';
-import 'package:first_ui/providers/home_main_provider.dart';
+import 'package:first_ui/cart/provider/cart_provider.dart';
+import 'package:first_ui/home/provider/home_main_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -38,8 +38,6 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                   ],
                 ),
                 const Divider(),
-
-                // Items (limited height)
                 Container(
                   constraints: BoxConstraints(
                     maxHeight: MediaQuery.of(context).size.height * 0.4,
@@ -191,10 +189,7 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                     },
                   ),
                 ),
-
                 const Divider(),
-
-                // Totals
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -224,8 +219,6 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                   ],
                 ),
                 const SizedBox(height: 20.0),
-
-                // Order button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(

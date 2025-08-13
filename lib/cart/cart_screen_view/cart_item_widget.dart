@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:first_ui/providers/cart_provider.dart';
+import 'package:first_ui/cart/provider/cart_provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class CartItemWidget extends StatelessWidget {

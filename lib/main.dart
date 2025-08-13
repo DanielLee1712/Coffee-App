@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:first_ui/providers/password_visibility_provider.dart';
-import 'package:first_ui/providers/cart_provider.dart';
-import 'package:first_ui/providers/home_main_provider.dart';
+import 'package:first_ui/login/provider/password_visibility_provider.dart';
+import 'package:first_ui/cart/provider/cart_provider.dart';
+import 'package:first_ui/home/provider/home_main_provider.dart';
 
-import 'package:first_ui/screens/login_main.dart';
-import 'package:first_ui/screens/cart_main.dart';
-import 'package:first_ui/screens/home_main.dart';
-import 'package:first_ui/screens/menu_screen.dart';
+import 'package:first_ui/login/login_screen/login_screen_main.dart';
+import 'package:first_ui/cart/cart_screen/cart_screen_main.dart';
+import 'package:first_ui/home/home_screen/home_screen_main.dart';
+import 'package:first_ui/home/home_screen_view/menu_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

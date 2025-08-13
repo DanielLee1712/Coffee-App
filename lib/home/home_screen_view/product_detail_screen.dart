@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:first_ui/models/cart_item.dart';
-import 'package:first_ui/providers/cart_provider.dart';
+import 'package:first_ui/cart/json/cart_item.dart';
+import 'package:first_ui/cart/provider/cart_provider.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final CartItem product;

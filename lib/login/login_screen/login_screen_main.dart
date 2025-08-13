@@ -1,6 +1,6 @@
+import 'package:first_ui/login/login_screen_view/remember.dart';
 import 'package:flutter/material.dart';
-import 'package:first_ui/widgets/hide_password.dart';
-import 'package:first_ui/widgets/remember.dart';
+import 'package:first_ui/login/login_screen_view/hide_password.dart';
 
 class LoginMain extends StatelessWidget {
   const LoginMain({Key? key}) : super(key: key);

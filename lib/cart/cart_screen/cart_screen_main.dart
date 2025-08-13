@@ -1,10 +1,10 @@
+import 'package:first_ui/home/home_screen_view/home_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:first_ui/providers/cart_provider.dart';
-import 'package:first_ui/widgets/cart_item_widget.dart';
-import 'package:first_ui/widgets/order_summary_bottom_sheet.dart';
-import 'package:first_ui/widgets/bottom_nav_item.dart';
-import 'package:first_ui/providers/home_main_provider.dart';
+import 'package:first_ui/cart/provider/cart_provider.dart';
+import 'package:first_ui/cart/cart_screen_view/cart_item_widget.dart';
+import 'package:first_ui/cart/cart_screen_view/order_summary_bottom_sheet.dart';
+import 'package:first_ui/home/provider/home_main_provider.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({Key? key}) : super(key: key);
