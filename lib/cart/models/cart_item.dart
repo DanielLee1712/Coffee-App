@@ -1,4 +1,27 @@
 class CartItem {
+  factory CartItem.fromJson(Map<String, dynamic> json) {
+    return CartItem(
+      name: json['name'],
+      description: json['description'],
+      price: json['price'],
+      deliveryFee: json['deliveryFee'],
+      imagePath: json['imagePath'],
+      category: json['category'],
+      size: json['size'] ?? 'M',
+      quantity: json['quantity'] ?? 1,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'description': description,
+        'price': price,
+        'deliveryFee': deliveryFee,
+        'imagePath': imagePath,
+        'category': category,
+        'size': size,
+        'quantity': quantity,
+      };
   final String name;
   final String description;
   final String price;

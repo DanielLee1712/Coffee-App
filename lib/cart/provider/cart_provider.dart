@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:first_ui/cart/json/cart_item.dart';
+import 'package:first_ui/cart/models/cart_item.dart';
 
 class CartProvider extends ChangeNotifier {
   final List<CartItem> _allProducts = [
@@ -199,7 +199,7 @@ class CartProvider extends ChangeNotifier {
   double get subtotal {
     double total = 0.0;
     for (var item in _currentCartItems) {
-      total += item.totalPrice; // dùng giá theo size
+      total += item.totalPrice; 
     }
     return total;
   }
@@ -221,7 +221,6 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
-  // Thêm vào giỏ theo name + size
   void addToCart(CartItem newItem) {
     final existingItemIndex = _currentCartItems.indexWhere(
       (item) => item.name == newItem.name && item.size == newItem.size,
@@ -311,7 +310,6 @@ class CartProvider extends ChangeNotifier {
     return item.quantity;
   }
 
-  // Tổng số lượng của tất cả size theo name (nếu cần)
   int getItemQuantity(String productName) {
     int total = 0;
     for (var item in _currentCartItems) {

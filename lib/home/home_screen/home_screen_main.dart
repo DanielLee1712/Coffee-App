@@ -141,7 +141,6 @@ class HomeMain extends StatelessWidget {
                                 style: TextStyle(fontWeight: FontWeight.w600)),
                             onTap: () {
                               homeProvider.closeMenu();
-                              // TODO: điều hướng settings nếu cần
                             },
                           ),
                           const Spacer(),
