@@ -199,7 +199,7 @@ class CartProvider extends ChangeNotifier {
   double get subtotal {
     double total = 0.0;
     for (var item in _currentCartItems) {
-      total += item.totalPrice; 
+      total += item.totalPrice;
     }
     return total;
   }
@@ -243,7 +243,6 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Cập nhật số lượng theo name + size
   void updateCartItemQuantityBySize(
       CartItem itemToUpdate, int newQuantity, String size) {
     final existingItemIndex = _currentCartItems.indexWhere(
@@ -273,7 +272,6 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Giữ lại hàm cũ để không phá chỗ khác (mặc định size M)
   void updateCartItemQuantity(CartItem itemToUpdate, int newQuantity) {
     updateCartItemQuantityBySize(itemToUpdate, newQuantity, 'M');
   }
@@ -292,7 +290,6 @@ class CartProvider extends ChangeNotifier {
 
   List<CartItem> get allAvailableProducts => _allProducts;
 
-  // Số lượng theo name + size
   int getItemQuantityBySize(String productName, String size) {
     final item = _currentCartItems.firstWhere(
       (item) => item.name == productName && item.size == size,
