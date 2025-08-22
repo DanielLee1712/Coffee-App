@@ -1,4 +1,26 @@
+import 'dart:convert';
+
 class CartItem {
+  final String name;
+  final String description;
+  final String price;
+  final String deliveryFee;
+  final String imagePath;
+  final String category;
+  String size;
+  int quantity;
+
+  CartItem({
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.deliveryFee,
+    required this.imagePath,
+    required this.category,
+    this.size = 'M',
+    this.quantity = 1,
+  });
+
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
       name: json['name'],
@@ -22,25 +44,13 @@ class CartItem {
         'size': size,
         'quantity': quantity,
       };
-  final String name;
-  final String description;
-  final String price;
-  final String deliveryFee;
-  final String imagePath;
-  final String category;
-  String size;
-  int quantity;
 
-  CartItem({
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.deliveryFee,
-    required this.imagePath,
-    required this.category,
-    this.size = 'M',
-    this.quantity = 1,
-  });
+  static List<CartItem> listFromJsonString(String s) {
+    final data = jsonDecode(s) as List;
+    return data
+        .map((e) => CartItem.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
 
   double get priceValue {
     final cleaned = price.replaceAll(RegExp(r'[^0-9.]'), '');
@@ -61,5 +71,14 @@ class CartItem {
 
   double get totalPrice {
     return unitPrice * quantity;
+  }
+}
+
+extension CartItemListJson on CartItem {
+  static List<CartItem> listFromJsonString(String s) {
+    final data = jsonDecode(s) as List;
+    return data
+        .map((e) => CartItem.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 }

@@ -4,44 +4,50 @@ class EventItem {
   final String img;
   final String desc;
   const EventItem({required this.img, required this.desc});
+
+  factory EventItem.fromJson(Map<String, dynamic> j) =>
+      EventItem(img: j['img'] as String, desc: (j['desc'] as String?) ?? '');
+
+  Map<String, dynamic> toJson() => {'img': img, 'desc': desc};
 }
 
 class EventsListHorizontal extends StatelessWidget {
   final List<EventItem> events;
-  final ScrollPhysics? physics;
   final double spacing;
   final double? itemExtent;
 
   const EventsListHorizontal({
     Key? key,
     required this.events,
-    this.physics,
     this.spacing = 10.0,
     this.itemExtent,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      physics: physics ?? const BouncingScrollPhysics(),
-      itemCount: events.length +
-          (spacing > 0 ? (events.isNotEmpty ? events.length - 1 : 0) : 0),
-      itemExtent: itemExtent,
-      itemBuilder: (context, i) {
-        if (spacing > 0 && i.isOdd) {
-          return SizedBox(height: spacing);
-        }
-        final idx = spacing > 0 ? (i ~/ 2) : i;
-        final item = events[idx];
-        return _EventTileHorizontal(item: item);
-      },
+    final hasSpacing = spacing > 0;
+    final itemCount = events.length +
+        (hasSpacing ? (events.isNotEmpty ? events.length - 1 : 0) : 0);
+
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final itemIndex = hasSpacing ? index ~/ 2 : index;
+          if (hasSpacing && index.isOdd) {
+            return SizedBox(height: spacing);
+          }
+          final item = events[itemIndex];
+          return _EventCard(item: item);
+        },
+        childCount: hasSpacing ? itemCount : events.length,
+      ),
     );
   }
 }
 
-class _EventTileHorizontal extends StatelessWidget {
+class _EventCard extends StatelessWidget {
   final EventItem item;
-  const _EventTileHorizontal({Key? key, required this.item}) : super(key: key);
+  const _EventCard({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,18 +73,12 @@ class _EventTileHorizontal extends StatelessWidget {
             ),
             child: Image.asset(
               item.img,
-              width: 80,
-              height: 80,
+              width: 90,
+              height: 90,
               fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                width: 80,
-                height: 80,
-                color: Colors.grey[300],
-                alignment: Alignment.center,
-                child: const Icon(Icons.local_cafe),
-              ),
             ),
           ),
+          const SizedBox(width: 12),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(10),

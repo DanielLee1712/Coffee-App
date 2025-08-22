@@ -1,4 +1,4 @@
-import 'package:first_ui/home/home_screen_view/event_grid.dart';
+import 'package:first_ui/home/home_screen_view/event_list.dart';
 import 'package:first_ui/home/home_screen_view/product_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,23 +16,11 @@ class HomeMain extends StatelessWidget {
             desc: 'Giảm 20% cho Latte vào thứ 4.'),
         EventItem(
             img: 'assets/images/Iced_Cappuccino.jpeg',
-            desc: 'Combo Cappuccino + Bánh ngọt chỉ 29k.'),
+            desc: 'Mua 1 tặng 1 Cappuccino vào thứ 6.'),
         EventItem(
-            img: 'assets/images/Iced_Espresso.jpeg',
-            desc: 'Mua 2 tặng 1 — Espresso nguyên chất.'),
-        EventItem(
-            img: 'assets/images/logo.png',
-            desc: 'Miễn phí giao hàng nội thành hôm nay.'),
-        EventItem(
-            img: 'assets/images/logo.png',
+            img: 'assets/images/Iced_Americano.jpeg',
             desc: 'Ưu đãi thành viên mới đến 50%.'),
       ];
-
-  double _eventsListHeight(int n,
-      {double itemExtent = 90, double spacing = 10}) {
-    if (n <= 0) return 0;
-    return n * itemExtent + (n - 1) * spacing;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,46 +36,33 @@ class HomeMain extends StatelessWidget {
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: ListView.builder(
-                    itemCount: 4,
-                    itemBuilder: (context, index) {
-                      switch (index) {
-                        case 0:
-                          return const Column(
-                            children: [
-                              HomeHeader(),
-                              SizedBox(height: 20),
-                            ],
-                          );
-
-                        case 1:
-                          return const ProductGridSmall();
-
-                        case 2:
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 16, bottom: 10),
-                            child: Text(
-                              'Sự kiện đang diễn ra',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.brown[700],
-                                fontWeight: FontWeight.w700,
-                              ),
+                  child: CustomScrollView(
+                    slivers: [
+                      const SliverToBoxAdapter(
+                        child: Column(
+                          children: [
+                            HomeHeader(),
+                            SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                      const ProductGridSmall(),
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 16, bottom: 10),
+                          child: Text(
+                            'Sự kiện đang diễn ra',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.brown[700],
+                              fontWeight: FontWeight.w700,
                             ),
-                          );
-
-                        case 3:
-                          final h = _eventsListHeight(events.length);
-                          return SizedBox(
-                            height: h,
-                            child: EventsListHorizontal(
-                              events: events,
-                            ),
-                          );
-                        default:
-                          return const SizedBox.shrink();
-                      }
-                    },
+                          ),
+                        ),
+                      ),
+                      EventsListHorizontal(events: events),
+                      const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                    ],
                   ),
                 ),
               ),
@@ -119,31 +94,24 @@ class HomeMain extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFFB8860B),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 40),
-                          ListTile(
-                            leading: const Icon(Icons.menu,
-                                color: Color(0xFFB8860B)),
-                            title: const Text('Menu',
-                                style: TextStyle(fontWeight: FontWeight.w600)),
-                            onTap: () {
-                              homeProvider.closeMenu();
-                              Navigator.of(context).pushNamed('/menu');
-                            },
+                          const Divider(height: 1),
+                          Expanded(
+                            child: ListView(
+                              children: const [
+                                ListTile(
+                                  leading: Icon(Icons.local_cafe),
+                                  title: Text('Thực đơn'),
+                                ),
+                                ListTile(
+                                  leading: Icon(Icons.card_giftcard),
+                                  title: Text('Khuyến mãi'),
+                                ),
+                              ],
+                            ),
                           ),
-                          ListTile(
-                            leading: const Icon(Icons.settings,
-                                color: Color(0xFFB8860B)),
-                            title: const Text('Settings',
-                                style: TextStyle(fontWeight: FontWeight.w600)),
-                            onTap: () {
-                              homeProvider.closeMenu();
-                            },
-                          ),
-                          const Spacer(),
                         ],
                       ),
                     ),

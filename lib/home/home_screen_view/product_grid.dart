@@ -10,7 +10,6 @@ class ProductGridSmall extends StatelessWidget {
   final double crossSpacing;
   final double mainSpacing;
   final double childAspectRatio;
-
   final double horizontalContentPadding;
 
   const ProductGridSmall({
@@ -20,17 +19,8 @@ class ProductGridSmall extends StatelessWidget {
     this.crossSpacing = 8.0,
     this.mainSpacing = 8.0,
     this.childAspectRatio = 1.00,
-    this.horizontalContentPadding = 16.0,
+    this.horizontalContentPadding = 10.0,
   }) : super(key: key);
-
-  double _calcGridHeight(BuildContext context, int itemCount) {
-    final rows = (itemCount / columns).ceil();
-    final screenWidth = MediaQuery.of(context).size.width;
-    final contentWidth = screenWidth - horizontalContentPadding * 2;
-    final tileWidth = (contentWidth - crossSpacing * (columns - 1)) / columns;
-    final tileHeight = tileWidth / childAspectRatio;
-    return rows * tileHeight + (rows - 1) * mainSpacing;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,23 +28,23 @@ class ProductGridSmall extends StatelessWidget {
       selector: (_, p) => p.allAvailableProducts,
       builder: (context, products, _) {
         final count = (products.length > maxItems) ? maxItems : products.length;
-        final gridHeight = _calcGridHeight(context, count);
 
-        return SizedBox(
-          height: gridHeight,
-          child: GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
+        return SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalContentPadding),
+          sliver: SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: columns,
               childAspectRatio: childAspectRatio,
               crossAxisSpacing: crossSpacing,
               mainAxisSpacing: mainSpacing,
             ),
-            itemCount: count,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return _SmallProductTile(product: product);
-            },
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final product = products[index];
+                return _SmallProductTile(product: product);
+              },
+              childCount: count,
+            ),
           ),
         );
       },
@@ -84,34 +74,26 @@ class _SmallProductTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withOpacity(0.08),
               blurRadius: 6,
-              offset: const Offset(0, 1),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        padding: const EdgeInsets.all(10),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 35,
-              height: 35,
-              decoration: BoxDecoration(
-                color: const Color(0xFF8B5E3C),
+            Expanded(
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-              ),
-              alignment: Alignment.center,
-              child: Image.asset(
-                product.imagePath,
-                width: 30,
-                height: 30,
-                fit: BoxFit.contain,
-                errorBuilder: (_, __, ___) =>
-                    const Icon(Icons.image, size: 20, color: Colors.white),
+                child: Image.asset(
+                  product.imagePath,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
               ),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 3),
             Text(
               product.name,
               maxLines: 1,

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:first_ui/cart/models/cart_item.dart';
+import 'package:flutter/services.dart';
 
 class CartProvider extends ChangeNotifier {
   final List<CartItem> _allProducts = [
@@ -323,5 +326,18 @@ class CartProvider extends ChangeNotifier {
 
   int getCartItemIndex(String productName) {
     return _currentCartItems.indexWhere((item) => item.name == productName);
+  }
+
+  Future<void> loadProductsFromAssets(String assetPath) async {
+    try {
+      final raw = await rootBundle.loadString(assetPath);
+      final data = jsonDecode(raw) as List;
+      _allProducts
+        ..clear()
+        ..addAll(data.map((e) => CartItem.fromJson(e as Map<String, dynamic>)));
+      notifyListeners();
+    } catch (e) {
+      debugPrint('CartProvider.loadProductsFromAssets error: $e');
+    }
   }
 }
