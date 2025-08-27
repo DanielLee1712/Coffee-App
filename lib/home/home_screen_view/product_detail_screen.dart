@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:first_ui/cart/models/cart_item.dart';
 import 'package:first_ui/cart/provider/cart_provider.dart';
+import 'package:first_ui/home/home_screen_view/event_list.dart'
+    show eventListRefreshBus;
 
 class ProductDetailScreen extends StatefulWidget {
   final CartItem product;
@@ -18,6 +20,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   String _selectedSize = 'M';
   int _quantity = 1;
 
+  bool _didNotify = false;
+  void _notifyOnce() {
+    if (_didNotify) return;
+    _didNotify = true;
+    eventListRefreshBus.trigger();
+  }
+
   final List<String> _chocolateChoices = [
     'White Chocolate',
     'Milk Chocolate',
@@ -33,6 +42,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     if (_quantity == 0) {
       _quantity = 1;
     }
+  }
+
+  @override
+  void dispose() {
+    _notifyOnce();
+    super.dispose();
   }
 
   double _unitPriceForSize() {
@@ -85,6 +100,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
+                      _notifyOnce();
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -227,12 +243,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             return Padding(
                               padding: const EdgeInsets.only(right: 10),
                               child: _buildChoiceButton(
-                                  choice, _selectedChocolate == choice,
-                                  (value) {
-                                setState(() {
-                                  _selectedChocolate = value;
-                                });
-                              }),
+                                choice,
+                                _selectedChocolate == choice,
+                                (value) {
+                                  setState(() {
+                                    _selectedChocolate = value;
+                                  });
+                                },
+                              ),
                             );
                           },
                         ),
@@ -284,9 +302,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           const Spacer(),
                           _buildQuantityButton(Icons.remove, () {
                             setState(() {
-                              if (_quantity > 1) {
-                                _quantity--;
-                              }
+                              if (_quantity > 1) _quantity--;
                             });
                           }),
                           Padding(
@@ -334,21 +350,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ElevatedButton(
                             onPressed: () {
                               cartProvider.updateCartItemQuantityBySize(
-                                  widget.product, _quantity, _selectedSize);
+                                widget.product,
+                                _quantity,
+                                _selectedSize,
+                              );
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                      'Đã thêm $_quantity ${widget.product.name} (Size $_selectedSize) vào giỏ hàng!'),
+                                    'Đã thêm $_quantity ${widget.product.name} (Size $_selectedSize) vào giỏ hàng!',
+                                  ),
                                   backgroundColor: const Color(0xFFB8860B),
                                   duration: const Duration(seconds: 2),
                                 ),
                               );
+
                               Navigator.pop(context);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFB8860B),
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 40, vertical: 15),
+                                horizontal: 40,
+                                vertical: 15,
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
@@ -399,7 +422,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Widget _buildChoiceButton(
-      String text, bool isSelected, ValueChanged<String> onTap) {
+    String text,
+    bool isSelected,
+    ValueChanged<String> onTap,
+  ) {
     return GestureDetector(
       onTap: () => onTap(text),
       child: Container(
@@ -424,7 +450,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Widget _buildSizeButton(
-      String text, bool isSelected, ValueChanged<String> onTap) {
+    String text,
+    bool isSelected,
+    ValueChanged<String> onTap,
+  ) {
     return GestureDetector(
       onTap: () => onTap(text),
       child: Container(

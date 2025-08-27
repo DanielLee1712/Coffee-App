@@ -1,4 +1,6 @@
 import 'package:first_ui/home/home_screen_view/event_list.dart';
+import 'package:first_ui/home/home_screen_view/menu_screen.dart';
+import 'package:first_ui/home/model/event_list_detail.dart';
 import 'package:first_ui/home/home_screen_view/product_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,27 +9,56 @@ import 'package:first_ui/home/provider/home_main_provider.dart';
 import 'package:first_ui/home/home_screen_view/home_header.dart';
 import 'package:first_ui/home/home_screen_view/home_bottom_navigation_bar.dart';
 
+const int kSectionProductGrid = 1;
+const int kSectionEventTitle = 2;
+const int kSectionEventList = 3;
+
+class _SectionSliver {
+  final int id;
+  final Widget Function(BuildContext) buildSliver;
+  const _SectionSliver({required this.id, required this.buildSliver});
+}
+
 class HomeMain extends StatelessWidget {
   const HomeMain({Key? key}) : super(key: key);
 
-  List<EventItem> _demoEvents() => const [
-        EventItem(
-            img: 'assets/images/Hot_Latte.jpeg',
-            desc: 'Giảm 20% cho Latte vào thứ 4.'),
-        EventItem(
-            img: 'assets/images/Iced_Cappuccino.jpeg',
-            desc: 'Mua 1 tặng 1 Cappuccino vào thứ 6.'),
-        EventItem(
-            img: 'assets/images/Iced_Americano.jpeg',
-            desc: 'Ưu đãi thành viên mới đến 50%.'),
-      ];
-
   @override
   Widget build(BuildContext context) {
-    final events = _demoEvents();
+    final events = demoEvents;
 
     return Consumer<HomeMainProvider>(
       builder: (context, homeProvider, _) {
+        final sections = <_SectionSliver>[
+          _SectionSliver(
+            id: kSectionProductGrid,
+            buildSliver: (ctx) => const ProductGridSmall(),
+          ),
+          _SectionSliver(
+            id: kSectionEventTitle,
+            buildSliver: (ctx) => const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(top: 16, bottom: 10),
+                child: Text(
+                  'Sự kiện đang diễn ra',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF5D4037),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          _SectionSliver(
+            id: kSectionEventList,
+            buildSliver: (ctx) => EventsListHorizontal(events: events),
+          ),
+        ];
+
+        sections.sort((a, b) => a.id.compareTo(b.id));
+        final sortedSlivers =
+            sections.map((s) => s.buildSliver(context)).toList();
+
         return Scaffold(
           backgroundColor: const Color(0xFFF6F6F6),
           body: Stack(
@@ -46,21 +77,7 @@ class HomeMain extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const ProductGridSmall(),
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 16, bottom: 10),
-                          child: Text(
-                            'Sự kiện đang diễn ra',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.brown[700],
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                      ),
-                      EventsListHorizontal(events: events),
+                      ...sortedSlivers,
                       const SliverToBoxAdapter(child: SizedBox(height: 16)),
                     ],
                   ),
@@ -84,33 +101,39 @@ class HomeMain extends StatelessWidget {
                     color: Colors.white,
                     elevation: 8,
                     child: SafeArea(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(20),
-                            child: const Text(
-                              'Tiện ích',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
+                      child: CustomScrollView(
+                        slivers: [
+                          const SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Text(
+                                'Tiện ích',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
-                          const Divider(height: 1),
-                          Expanded(
-                            child: ListView(
-                              children: const [
-                                ListTile(
-                                  leading: Icon(Icons.local_cafe),
-                                  title: Text('Thực đơn'),
-                                ),
-                                ListTile(
-                                  leading: Icon(Icons.card_giftcard),
-                                  title: Text('Khuyến mãi'),
-                                ),
-                              ],
-                            ),
+                          const SliverToBoxAdapter(child: Divider(height: 1)),
+                          SliverList(
+                            delegate: SliverChildListDelegate.fixed([
+                              ListTile(
+                                leading: const Icon(Icons.local_cafe),
+                                title: const Text('Thực đơn'),
+                                onTap: () {
+                                  context.read<HomeMainProvider>().closeMenu();
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (_) => const MenuScreen()),
+                                  );
+                                },
+                              ),
+                              const ListTile(
+                                leading: Icon(Icons.card_giftcard),
+                                title: Text('Khuyến mãi'),
+                              ),
+                            ]),
                           ),
                         ],
                       ),
