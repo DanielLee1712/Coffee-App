@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "sections": [
+    { "id": "header", "enabled": true },
+    { "id": "product_grid", "enabled": true },
+    { "id": "events_title", "enabled": true, "text": "Sự kiện đang diễn ra" },
+    { "id": "event_list", "enabled": true }
+  ],
+  "events": [
+    {
+      "img": "assets/images/events/event_01.jpeg",
+      "desc": "Giảm giá 20% tất cả đồ uống trong tuần lễ cà phê."
+    },
+    {
+      "img": "assets/images/events/event_02.jpeg",
+      "desc": "Workshop pha chế Latte Art vào cuối tuần."
+    },
+    {
+      "img": "assets/images/events/event_03.jpeg",
+      "desc": "Combo sáng: Cà phê + Bánh croissant chỉ 49k."
+    },
+    {
+      "img": "assets/images/events/event_04.jpeg",
+      "desc": "Tặng voucher 30k cho đơn hàng đầu tiên trong app."
+    },
+    {
+      "img": "assets/images/events/event_05.jpeg",
+      "desc": "Ra mắt Chocolate Dark mới – thử ngay!"
+    },
+    {
+      "img": "assets/images/events/event_06.jpeg",
+      "desc": "Happy Hour 15:00–17:00: Mua 1 tặng 1."
+    },
+    {
+      "img": "assets/images/events/event_07.jpeg",
+      "desc": "Thành viên VIP tích điểm x2 trong tháng này."
+    },
+    {
+      "img": "assets/images/events/event_08.jpeg",
+      "desc": "Sự kiện mini game: Check-in nhận quà."
+    }
+  ],
+  "menu": {
+    "items": [
+      { "id": "menu", "title": "Thực đơn", "icon": "local_cafe", "route": "/menu" },
+      { "id": "promo", "title": "Khuyến mãi", "icon": "card_giftcard", "route": "/promo" }
+    ]
+  }
+}

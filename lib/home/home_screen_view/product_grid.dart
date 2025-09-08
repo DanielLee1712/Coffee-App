@@ -24,28 +24,58 @@ class ProductGridSmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<CartProvider, List<CartItem>>(
-      selector: (_, p) => p.allAvailableProducts,
-      builder: (context, products, _) {
-        final count = (products.length > maxItems) ? maxItems : products.length;
+    return FutureBuilder(
+      future: context.read<CartProvider>().loadProductsFromDB(),
+      builder: (context, snapshot) {
+        return Selector<CartProvider, List<CartItem>>(
+          selector: (_, p) => p.allAvailableProducts,
+          builder: (context, products, _) {
+            if (snapshot.connectionState == ConnectionState.waiting &&
+                products.isEmpty) {
+              return const SliverToBoxAdapter(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              );
+            }
 
-        return SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: horizontalContentPadding),
-          sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: columns,
-              childAspectRatio: childAspectRatio,
-              crossAxisSpacing: crossSpacing,
-              mainAxisSpacing: mainSpacing,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final product = products[index];
-                return _SmallProductTile(product: product);
-              },
-              childCount: count,
-            ),
-          ),
+            if (products.isEmpty) {
+              return const SliverToBoxAdapter(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text("Không có sản phẩm"),
+                  ),
+                ),
+              );
+            }
+
+            final count =
+                (products.length > maxItems) ? maxItems : products.length;
+
+            return SliverPadding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: horizontalContentPadding),
+              sliver: SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: columns,
+                  childAspectRatio: childAspectRatio,
+                  crossAxisSpacing: crossSpacing,
+                  mainAxisSpacing: mainSpacing,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final product = products[index];
+                    return _SmallProductTile(product: product);
+                  },
+                  childCount: count,
+                ),
+              ),
+            );
+          },
         );
       },
     );
@@ -90,6 +120,10 @@ class _SmallProductTile extends StatelessWidget {
                   product.imagePath,
                   fit: BoxFit.cover,
                   width: double.infinity,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.coffee,
+                        size: 40, color: Colors.grey);
+                  },
                 ),
               ),
             ),

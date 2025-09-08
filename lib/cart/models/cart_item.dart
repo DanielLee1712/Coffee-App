@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class CartItem {
+  final int? id;
   final String name;
   final String description;
   final String price;
@@ -11,6 +12,7 @@ class CartItem {
   int quantity;
 
   CartItem({
+    this.id,
     required this.name,
     required this.description,
     required this.price,
@@ -23,18 +25,22 @@ class CartItem {
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
-      name: json['name'],
-      description: json['description'],
-      price: json['price'],
-      deliveryFee: json['deliveryFee'],
-      imagePath: json['imagePath'],
-      category: json['category'],
+      id: json['id'] as int?,
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      price: json['price'] ?? '',
+      deliveryFee: json['deliveryFee'] ?? '',
+      imagePath: json['imagePath'] ?? '',
+      category: json['category'] ?? '',
       size: json['size'] ?? 'M',
-      quantity: json['quantity'] ?? 1,
+      quantity: (json['quantity'] ?? 1) is int
+          ? json['quantity']
+          : int.tryParse(json['quantity'].toString()) ?? 1,
     );
   }
 
   Map<String, dynamic> toJson() => {
+        if (id != null) 'id': id,
         'name': name,
         'description': description,
         'price': price,
@@ -71,6 +77,30 @@ class CartItem {
 
   double get totalPrice {
     return unitPrice * quantity;
+  }
+
+  CartItem copyWith({
+    int? id,
+    String? name,
+    String? description,
+    String? price,
+    String? deliveryFee,
+    String? imagePath,
+    String? category,
+    String? size,
+    int? quantity,
+  }) {
+    return CartItem(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      deliveryFee: deliveryFee ?? this.deliveryFee,
+      imagePath: imagePath ?? this.imagePath,
+      category: category ?? this.category,
+      size: size ?? this.size,
+      quantity: quantity ?? this.quantity,
+    );
   }
 }
 

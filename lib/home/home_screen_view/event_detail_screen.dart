@@ -70,7 +70,6 @@ class EventDetailScreen extends StatelessWidget {
                       style: const TextStyle(fontSize: 14, height: 1.4),
                     ),
                     const SizedBox(height: 16),
-                    // Bạn có thể thêm thời gian, địa điểm, nút đăng ký… ở đây
                   ],
                 ),
               ),

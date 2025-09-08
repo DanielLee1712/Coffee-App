@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:first_ui/cart/models/cart_item.dart';
 import 'package:first_ui/cart/provider/cart_provider.dart';
-import 'package:first_ui/home/home_screen_view/event_list.dart'
-    show eventListRefreshBus;
 
 class ProductDetailScreen extends StatefulWidget {
   final CartItem product;
@@ -19,13 +17,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   String _selectedChocolate = 'White Chocolate';
   String _selectedSize = 'M';
   int _quantity = 1;
-
-  bool _didNotify = false;
-  void _notifyOnce() {
-    if (_didNotify) return;
-    _didNotify = true;
-    eventListRefreshBus.trigger();
-  }
 
   final List<String> _chocolateChoices = [
     'White Chocolate',
@@ -46,7 +37,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   void dispose() {
-    _notifyOnce();
+    Navigator.pop(context, true);
     super.dispose();
   }
 
@@ -100,7 +91,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      _notifyOnce();
+                      Navigator.pop(context, true);
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -364,7 +355,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                               );
 
-                              Navigator.pop(context);
+                              Navigator.pop(context, true);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFB8860B),
