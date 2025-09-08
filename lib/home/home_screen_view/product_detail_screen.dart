@@ -37,7 +37,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   void dispose() {
-    Navigator.pop(context, true);
     super.dispose();
   }
 
@@ -92,7 +91,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context, true);
-                      Navigator.pop(context);
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8),

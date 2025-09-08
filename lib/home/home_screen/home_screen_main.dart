@@ -38,8 +38,9 @@ class _HomeMainState extends State<HomeMain> {
   @override
   Widget build(BuildContext context) {
     final homeProvider = context.watch<HomeMainProvider>();
+    final homeConfigProvider = context.watch<HomeConfigProvider>();
 
-    final eventTitleText = "Sự kiện đang diễn ra";
+    final eventTitleText = homeConfigProvider.eventsTitle ?? "Sự kiện";
 
     final sections = <_SectionSliver>[
       _SectionSliver(
