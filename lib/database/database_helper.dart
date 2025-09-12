@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:first_ui/login/model/users.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart';
 
@@ -63,6 +64,16 @@ class DatabaseHelper {
           )
         ''');
 
+        await db.execute('''
+          CREATE TABLE users(
+            usrId INTEGER PRIMARY KEY AUTOINCREMENT,
+            fullname TEXT,
+            email TEXT,
+            usrName TEXT UNIQUE,
+            password TEXT
+          )
+        ''');
+
         await insertInitialProducts(db);
       },
     );
@@ -94,6 +105,28 @@ class DatabaseHelper {
       String table, String where, List<Object?> whereArgs) async {
     final db = await DatabaseHelper.database();
     return db.query(table, where: where, whereArgs: whereArgs);
+  }
+
+  Future<bool> authenticate(Users usr) async {
+    final db = await DatabaseHelper.database();
+    var result = await db.query(
+      "users",
+      where: "usrName = ? AND password = ?",
+      whereArgs: [usr.usrName, usr.password],
+    );
+    return result.isNotEmpty;
+  }
+
+  Future<int> createUser(Users usr) async {
+    final db = await DatabaseHelper.database();
+    return await db.insert("users", usr.toMap());
+  }
+
+  Future<Users?> getUserByUsername(String username) async {
+    final db = await DatabaseHelper.database();
+    var result =
+        await db.query("users", where: "usrName = ?", whereArgs: [username]);
+    return result.isNotEmpty ? Users.fromMap(result.first) : null;
   }
 
   static Future<void> insertInitialProducts(Database db) async {
