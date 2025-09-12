@@ -1,3 +1,5 @@
+import 'package:first_ui/database/database_helper.dart';
+import 'package:first_ui/login/model/users.dart';
 import 'package:flutter/material.dart';
 
 class SignUpProvider extends ChangeNotifier {
@@ -32,5 +34,25 @@ class SignUpProvider extends ChangeNotifier {
         emailError ||
         passwordError ||
         confirmPasswordError);
+  }
+
+  Future<bool> register() async {
+    if (!isValid()) return false;
+
+    final user = Users(
+      usrName: usernameController.text.trim(),
+      email: emailController.text.trim(),
+      fullname: "",
+      password: passwordController.text.trim(),
+    );
+
+    try {
+      final dbHelper = DatabaseHelper();
+      await dbHelper.createUser(user);
+      return true;
+    } catch (e) {
+      debugPrint("Error when creating user: $e");
+      return false;
+    }
   }
 }

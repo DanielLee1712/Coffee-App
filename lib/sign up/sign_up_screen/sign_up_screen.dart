@@ -86,13 +86,21 @@ class SignUpScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 30),
                         ElevatedButton(
-                          onPressed: () {
-                            if (signUpProvider.isValid()) {
+                          onPressed: () async {
+                            final success = await signUpProvider.register();
+                            if (success) {
+                              if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text("Đăng ký thành công!")),
                               );
-                              Navigator.pushReplacementNamed(context, '/home');
+                              Navigator.pop(context);
+                            } else {
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Đăng ký thất bại!")),
+                              );
                             }
                           },
                           style: ElevatedButton.styleFrom(
