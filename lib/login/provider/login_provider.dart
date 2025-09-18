@@ -6,6 +6,13 @@ class LoginProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  String? _currentUsername;
+  String? get currentUsername => _currentUsername;
+  void setCurrentUsername(String? username) {
+    _currentUsername = username;
+    notifyListeners();
+  }
+
   Future<bool> login(String username, String password) async {
     if (username.isEmpty || password.isEmpty) {
       return false;
@@ -24,9 +31,18 @@ class LoginProvider with ChangeNotifier {
     final dbHelper = DatabaseHelper();
     final success = await dbHelper.authenticate(usr);
 
+    if (success) {
+      _currentUsername = username;
+    }
+
     _isLoading = false;
     notifyListeners();
 
     return success;
+  }
+
+  void logout() {
+    _currentUsername = null;
+    notifyListeners();
   }
 }

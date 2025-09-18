@@ -70,7 +70,8 @@ class DatabaseHelper {
             fullname TEXT,
             email TEXT,
             usrName TEXT UNIQUE,
-            password TEXT
+            password TEXT,
+            avatarPath TEXT
           )
         ''');
 
@@ -117,16 +118,32 @@ class DatabaseHelper {
     return result.isNotEmpty;
   }
 
+  Future<int> updateUser(Users usr) async {
+    final db = await DatabaseHelper.database();
+    return await db.update(
+      "users",
+      usr.toMap(),
+      where: "usrId = ?",
+      whereArgs: [usr.usrId],
+    );
+  }
+
   Future<int> createUser(Users usr) async {
     final db = await DatabaseHelper.database();
     return await db.insert("users", usr.toMap());
   }
 
   Future<Users?> getUserByUsername(String username) async {
-    final db = await DatabaseHelper.database();
-    var result =
-        await db.query("users", where: "usrName = ?", whereArgs: [username]);
-    return result.isNotEmpty ? Users.fromMap(result.first) : null;
+    Database db = await DatabaseHelper.database();
+    List<Map<String, dynamic>> maps = await db.query(
+      'users',
+      where: 'usrname = ?',
+      whereArgs: [username],
+    );
+    if (maps.isNotEmpty) {
+      return Users.fromMap(maps.first);
+    }
+    return null;
   }
 
   static Future<void> insertInitialProducts(Database db) async {

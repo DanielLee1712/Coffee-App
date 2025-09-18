@@ -25,7 +25,7 @@ class SignUpScreen extends StatelessWidget {
                   builder: (context, signUpProvider, _) {
                     return Column(
                       children: [
-                        const SizedBox(height: 50),
+                        const SizedBox(height: 30),
                         Image.asset(
                           'assets/images/logo.png',
                           width: 100,
@@ -36,7 +36,7 @@ class SignUpScreen extends StatelessWidget {
                           "Tạo tài khoản",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 32,
+                            fontSize: 28,
                             fontWeight: FontWeight.bold,
                             shadows: [
                               Shadow(
@@ -47,7 +47,16 @@ class SignUpScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 20),
+                        _buildField(
+                          label: "Họ và tên",
+                          icon: Icons.person,
+                          controller: signUpProvider.fullnameController,
+                          error: signUpProvider.submitted &&
+                              signUpProvider.fullnameError,
+                          onChanged: () => signUpProvider.validateFields(),
+                        ),
+                        const SizedBox(height: 10),
                         _buildField(
                           label: "Tên đăng nhập",
                           icon: Icons.person,
@@ -56,7 +65,7 @@ class SignUpScreen extends StatelessWidget {
                               signUpProvider.usernameError,
                           onChanged: () => signUpProvider.validateFields(),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         _buildField(
                           label: "Email",
                           icon: Icons.email,
@@ -65,7 +74,7 @@ class SignUpScreen extends StatelessWidget {
                               signUpProvider.emailError,
                           onChanged: () => signUpProvider.validateFields(),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         ChangeNotifierProvider(
                           create: (_) => PasswordVisibilityProvider(),
                           child: HidePassword(
@@ -74,7 +83,7 @@ class SignUpScreen extends StatelessWidget {
                             getError: (p) => p.passwordError,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 10),
                         ChangeNotifierProvider(
                           create: (_) => PasswordVisibilityProvider(),
                           child: HidePassword(
@@ -84,7 +93,7 @@ class SignUpScreen extends StatelessWidget {
                             getError: (p) => p.confirmPasswordError,
                           ),
                         ),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () async {
                             final success = await signUpProvider.register();

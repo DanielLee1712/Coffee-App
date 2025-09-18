@@ -1,3 +1,5 @@
+import 'package:first_ui/login/provider/login_provider.dart';
+import 'package:first_ui/personal/personal_screen/personal_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +21,7 @@ class AppRouter {
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => HomeMainProvider()),
         ChangeNotifierProvider(create: (_) => HomeConfigProvider()),
+        ChangeNotifierProvider(create: (_) => LoginProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -31,6 +34,20 @@ class AppRouter {
           '/cart': (_) => const CartPage(),
           '/menu': (_) => const MenuScreen(),
           '/menu_screens': (_) => const MenuScreen(),
+        },
+        onGenerateRoute: (settings) {
+          if (settings.name == '/personal') {
+            return MaterialPageRoute(
+              builder: (context) {
+                final username =
+                    Provider.of<LoginProvider>(context, listen: false)
+                            .currentUsername ??
+                        'guest';
+                return PersonalScreen(username: username);
+              },
+            );
+          }
+          return null;
         },
         onUnknownRoute: (_) =>
             MaterialPageRoute(builder: (_) => const LoginMain()),

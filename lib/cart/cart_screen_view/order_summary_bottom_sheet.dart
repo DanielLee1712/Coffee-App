@@ -255,8 +255,9 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                                       rootNav.pop();
                                       rootNav.pop();
 
-                                      rootNav.pushNamedAndRemoveUntil(
-                                          '/home', (route) => false);
+                                      context
+                                          .read<HomeMainProvider>()
+                                          .setSelectedBottomNavIndex(0);
 
                                       Future.microtask(() {
                                         cartProvider.resetAfterOrder();

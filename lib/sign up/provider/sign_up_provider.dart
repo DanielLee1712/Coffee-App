@@ -7,17 +7,19 @@ class SignUpProvider extends ChangeNotifier {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final fullnameController = TextEditingController();
 
   bool usernameError = false;
   bool emailError = false;
   bool passwordError = false;
   bool confirmPasswordError = false;
+  bool fullnameError = false;
 
   bool submitted = false;
 
   void validateFields() {
     if (!submitted) return;
-
+    fullnameError = fullnameController.text.isEmpty;
     usernameError = usernameController.text.isEmpty;
     emailError = emailController.text.isEmpty;
     passwordError = passwordController.text.isEmpty;
@@ -30,7 +32,8 @@ class SignUpProvider extends ChangeNotifier {
   bool isValid() {
     submitted = true;
     validateFields();
-    return !(usernameError ||
+    return !(fullnameError ||
+        usernameError ||
         emailError ||
         passwordError ||
         confirmPasswordError);
@@ -40,9 +43,9 @@ class SignUpProvider extends ChangeNotifier {
     if (!isValid()) return false;
 
     final user = Users(
+      fullname: fullnameController.text.trim(),
       usrName: usernameController.text.trim(),
       email: emailController.text.trim(),
-      fullname: "",
       password: passwordController.text.trim(),
     );
 

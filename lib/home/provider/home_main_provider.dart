@@ -9,6 +9,8 @@ class HomeMainProvider extends ChangeNotifier {
   int get selectedBottomNavIndex => _selectedBottomNavIndex;
   bool get isMenuOpen => _isMenuOpen;
 
+  get currentUsername => null;
+
   void setSelectedCategoryIndex(int index) {
     if (_selectedCategoryIndex != index) {
       _selectedCategoryIndex = index;
