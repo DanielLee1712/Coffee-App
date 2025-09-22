@@ -99,7 +99,7 @@ class DatabaseHelper {
   static Future<int> update(
       String table, Map<String, Object?> data, int id) async {
     final db = await DatabaseHelper.database();
-    return db.update(table, data, where: 'id = ?', whereArgs: [id]);
+    return db.update(table, data, where: 'usrId = ?', whereArgs: [id]);
   }
 
   static Future<List<Map<String, dynamic>>> queryWhere(

@@ -73,14 +73,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     backgroundImage: AssetImage("assets/images/logo.png"),
                   ),
                   const SizedBox(height: 20),
-                  // TextField(
-                  //   controller: _fullnameController,
-                  //   decoration: const InputDecoration(
-                  //     labelText: "Họ và tên",
-                  //     border: OutlineInputBorder(),
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 15),
+                  TextField(
+                    controller: _fullnameController,
+                    decoration: const InputDecoration(
+                      labelText: "Họ và tên",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
                   TextField(
                     controller: _emailController,
                     decoration: const InputDecoration(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:first_ui/cart/provider/cart_provider.dart';
 import 'package:first_ui/cart/models/cart_item.dart';
-import 'package:first_ui/home/home_screen_view/home_bottom_navigation_bar.dart';
 import 'package:first_ui/home/home_screen_view/product_detail_screen.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -76,7 +75,6 @@ class MenuScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: HomeBottomNavigationBar(),
     );
   }
 

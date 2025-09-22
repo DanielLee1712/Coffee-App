@@ -1,3 +1,4 @@
+import 'package:first_ui/home/provider/home_main_provider.dart';
 import 'package:first_ui/login/provider/login_provider.dart';
 import 'package:first_ui/login/login_screen_view/remember.dart';
 import 'package:first_ui/sign%20up/sign_up_screen/sign_up_screen.dart';
@@ -214,6 +215,9 @@ class _LoginMainState extends State<LoginMain> {
                                                       "Đăng nhập thành công!"),
                                                 ),
                                               );
+                                              context
+                                                  .read<HomeMainProvider>()
+                                                  .setSelectedBottomNavIndex(0);
                                               Navigator.pushReplacementNamed(
                                                   context, '/home');
                                             } else {

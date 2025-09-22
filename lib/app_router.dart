@@ -1,5 +1,6 @@
 import 'package:first_ui/login/provider/login_provider.dart';
 import 'package:first_ui/personal/personal_screen/personal_screen.dart';
+import 'package:first_ui/personal/provider/personal_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,7 @@ class AppRouter {
         ChangeNotifierProvider(create: (_) => HomeMainProvider()),
         ChangeNotifierProvider(create: (_) => HomeConfigProvider()),
         ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => PersonalProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
