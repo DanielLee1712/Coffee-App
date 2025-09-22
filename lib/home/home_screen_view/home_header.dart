@@ -16,24 +16,20 @@ class HomeHeader extends StatelessWidget {
           },
           child: Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: const Color(0xFFB8860B),
-              borderRadius: BorderRadius.circular(8),
-            ),
             child: const Icon(
               Icons.grid_view,
-              color: Colors.white,
-              size: 24,
+              color: Colors.black,
+              size: 30,
             ),
           ),
         ),
-        CircleAvatar(
-          radius: 25,
-          backgroundColor: Colors.grey[300],
-          child: Icon(
-            Icons.person,
-            color: Colors.grey[600],
-            size: 30,
+        GestureDetector(
+          onTap: () {
+            context.read<HomeMainProvider>().setSelectedBottomNavIndex(4);
+          },
+          child: const CircleAvatar(
+            radius: 25,
+            backgroundImage: AssetImage("assets/images/logo.png"),
           ),
         ),
       ],

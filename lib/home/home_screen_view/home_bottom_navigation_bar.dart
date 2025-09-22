@@ -4,7 +4,7 @@ import 'package:first_ui/home/provider/home_main_provider.dart';
 import 'package:first_ui/home/home_screen_view/product_grid.dart';
 import 'package:first_ui/home/home_screen_view/event_list.dart';
 import 'package:first_ui/cart/cart_screen/cart_screen_main.dart';
-import 'package:first_ui/personal/personal_screen/personal_screen.dart';
+import 'package:first_ui/personal/personal_screen/personal_screen_main.dart';
 
 class HomeBottomNavigationBar extends StatelessWidget {
   const HomeBottomNavigationBar({Key? key}) : super(key: key);

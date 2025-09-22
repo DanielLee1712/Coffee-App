@@ -10,7 +10,7 @@ import 'package:first_ui/home/home_screen_view/product_grid.dart';
 import 'package:first_ui/home/home_screen_view/event_list.dart';
 import 'package:first_ui/home/home_screen_view/menu_screen.dart';
 import 'package:first_ui/cart/cart_screen/cart_screen_main.dart';
-import 'package:first_ui/personal/personal_screen/personal_screen.dart';
+import 'package:first_ui/personal/personal_screen/personal_screen_main.dart';
 
 class HomeMain extends StatefulWidget {
   const HomeMain({Key? key}) : super(key: key);

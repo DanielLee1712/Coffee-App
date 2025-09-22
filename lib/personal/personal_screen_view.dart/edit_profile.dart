@@ -37,15 +37,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<void> _saveProfile() async {
     final db = DatabaseHelper();
-    final user = Users(
-      usrId: null,
+    final currentUser = await db.getUserByUsername(widget.username);
+    if (currentUser == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Không tìm thấy người dùng!")),
+      );
+      return;
+    }
+    final updatedUser = Users(
+      usrId: currentUser.usrId,
       fullname: _fullnameController.text.trim(),
       email: _emailController.text.trim(),
       usrName: _usernameController.text.trim(),
-      password: "",
+      password: currentUser.password,
     );
 
-    await DatabaseHelper.update("users", user.toMap(), user.usrId ?? 0);
+    await DatabaseHelper.update(
+        "users", updatedUser.toMap(), updatedUser.usrId ?? 0);
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -89,14 +97,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  TextField(
-                    controller: _usernameController,
-                    decoration: const InputDecoration(
-                      labelText: "Tên đăng nhập",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 25),
                   ElevatedButton(
                     onPressed: _saveProfile,
                     style: ElevatedButton.styleFrom(

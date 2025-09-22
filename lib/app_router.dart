@@ -1,5 +1,5 @@
 import 'package:first_ui/login/provider/login_provider.dart';
-import 'package:first_ui/personal/personal_screen/personal_screen.dart';
+import 'package:first_ui/personal/personal_screen/personal_screen_main.dart';
 import 'package:first_ui/personal/provider/personal_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
