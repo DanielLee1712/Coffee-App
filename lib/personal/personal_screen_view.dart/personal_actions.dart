@@ -1,4 +1,5 @@
 import 'package:first_ui/login/provider/login_provider.dart';
+import 'package:first_ui/personal/personal_screen_view.dart/change_password.dart';
 import 'package:first_ui/personal/personal_screen_view.dart/edit_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,13 @@ class PersonalActions extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.lock),
           title: const Text("Đổi mật khẩu"),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ChangePasswordScreen(username: username),
+              ),
+            );
+          },
         ),
         ListTile(
           leading: const Icon(Icons.settings),

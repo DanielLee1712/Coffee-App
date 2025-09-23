@@ -4,7 +4,6 @@ class Users {
   final String email;
   final String usrName;
   final String password;
-  final String? avatarPath;
 
   Users({
     this.usrId,
@@ -12,7 +11,6 @@ class Users {
     required this.email,
     required this.usrName,
     required this.password,
-    this.avatarPath,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,7 +20,6 @@ class Users {
       'email': email,
       'usrName': usrName,
       'password': password,
-      'avatarPath': avatarPath,
     };
   }
 
@@ -33,7 +30,8 @@ class Users {
       email: map['email'] ?? '',
       usrName: map['usrName'] ?? '',
       password: map['password'] ?? '',
-      avatarPath: map['avatarPath'],
     );
   }
+
+  get fullName => null;
 }

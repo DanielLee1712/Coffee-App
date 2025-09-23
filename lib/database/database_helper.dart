@@ -70,8 +70,7 @@ class DatabaseHelper {
             fullname TEXT,
             email TEXT,
             usrName TEXT UNIQUE,
-            password TEXT,
-            avatarPath TEXT
+            password TEXT
           )
         ''');
 
