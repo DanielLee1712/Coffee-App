@@ -1,3 +1,4 @@
+import 'package:first_ui/notifications/Notification_screen/Notification_screen_main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:first_ui/home/provider/home_main_provider.dart';
@@ -18,7 +19,7 @@ class HomeBottomNavigationBar extends StatelessWidget {
     ),
     Center(child: Text('Yêu thích')),
     CartPage(),
-    Center(child: Text('Thông báo')),
+    NotificationScreen(),
     PersonalScreen(username: "user"),
   ];
 

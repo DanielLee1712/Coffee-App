@@ -19,7 +19,7 @@ class DatabaseHelper {
     print(path);
     _db = await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE products(
@@ -40,6 +40,7 @@ class DatabaseHelper {
             productId INTEGER,
             quantity INTEGER,
             size TEXT,
+            username TEXT,
             FOREIGN KEY(productId) REFERENCES products(id) ON DELETE CASCADE
           )
         ''');
@@ -48,7 +49,8 @@ class DatabaseHelper {
           CREATE TABLE bills(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             createdAt TEXT,
-            total REAL
+            total REAL,
+            username TEXT
           )
         ''');
 
@@ -71,6 +73,18 @@ class DatabaseHelper {
             email TEXT,
             usrName TEXT UNIQUE,
             password TEXT
+          )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE notifications(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            billId INTEGER,
+            message TEXT,
+            createdAt TEXT,
+            username TEXT,
+            usrId INTEGER,
+            FOREIGN KEY(usrId) REFERENCES users(ursId) ON DELETE CASCADE
           )
         ''');
 
@@ -333,5 +347,19 @@ class DatabaseHelper {
       await db.insert('products', p,
           conflictAlgorithm: ConflictAlgorithm.replace);
     }
+  }
+
+  Future<Users?> getUserById(int usrId) async {
+    final db = await DatabaseHelper.database();
+    final maps = await db.query(
+      'users',
+      where: 'usrId = ?',
+      whereArgs: [usrId],
+      limit: 1,
+    );
+    if (maps.isNotEmpty) {
+      return Users.fromMap(maps.first);
+    }
+    return null;
   }
 }

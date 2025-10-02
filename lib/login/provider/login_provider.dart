@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:first_ui/database/database_helper.dart';
 import 'package:first_ui/login/model/users.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginProvider with ChangeNotifier {
   bool _isLoading = false;
@@ -47,6 +48,10 @@ class LoginProvider with ChangeNotifier {
 
       if (success) {
         _currentUsername = username;
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString("currentUsername", _currentUsername!);
+
         _isLoading = false;
         notifyListeners();
         return true;
@@ -67,8 +72,16 @@ class LoginProvider with ChangeNotifier {
     return false;
   }
 
-  void logout() {
+  Future<void> loadUserFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    _currentUsername = prefs.getString("currentUsername");
+    notifyListeners();
+  }
+
+  Future<void> logout() async {
     _currentUsername = null;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove("currentUsername");
     notifyListeners();
   }
 

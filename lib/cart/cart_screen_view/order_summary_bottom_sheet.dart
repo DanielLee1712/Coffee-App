@@ -1,5 +1,6 @@
 import 'package:first_ui/cart/provider/cart_provider.dart';
 import 'package:first_ui/home/provider/home_main_provider.dart';
+import 'package:first_ui/login/provider/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -242,26 +243,40 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.brown),
-                                    onPressed: () {
+                                    onPressed: () async {
                                       final cartProvider =
                                           context.read<CartProvider>();
                                       final homeProvider =
                                           context.read<HomeMainProvider>();
                                       final rootNav = Navigator.of(context,
                                           rootNavigator: true);
+                                      final username = context
+                                              .read<LoginProvider>()
+                                              .currentUsername ??
+                                          'guest';
 
-                                      homeProvider.setSelectedBottomNavIndex(0);
+                                      final billId =
+                                          await cartProvider.checkout(username);
 
+                                      if (billId > 0) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  "Đơn hàng #$billId đã được tạo thành công!")),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  "Đã có lỗi xảy ra. Vui lòng thử lại.")),
+                                        );
+                                      }
+
+                                      homeProvider.setSelectedBottomNavIndex(3);
                                       rootNav.pop();
                                       rootNav.pop();
-
-                                      context
-                                          .read<HomeMainProvider>()
-                                          .setSelectedBottomNavIndex(0);
-
-                                      Future.microtask(() {
-                                        cartProvider.resetAfterOrder();
-                                      });
                                     },
                                     child: const Text('Confirm',
                                         style: TextStyle(color: Colors.white)),

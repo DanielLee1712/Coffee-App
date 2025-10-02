@@ -6,6 +6,13 @@ import 'package:first_ui/cart/models/cart_item.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CartProvider extends ChangeNotifier {
+  String _owner = 'guest';
+  void setOwner(String? username) {
+    _owner = (username == null || username.isEmpty) ? 'guest' : username;
+  }
+
+  String get owner => _owner;
+
   List<CartItem> _allProducts = [];
   List<CartItem> get allAvailableProducts => _allProducts;
 
@@ -283,5 +290,52 @@ class CartProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('CartProvider.loadProductsFromAssets error: $e');
     }
+  }
+
+  Future<int> checkout(String username) async {
+    setOwner(username);
+
+    if (_currentCartItems.isEmpty) return -1;
+
+    final db = await DatabaseHelper.database();
+    final batch = db.batch();
+    final createdAt = DateTime.now().toIso8601String();
+
+    batch.insert('bills', {
+      'createdAt': createdAt,
+      'total': totalAmount,
+      'username': _owner,
+    });
+
+    await batch.commit(noResult: true);
+    final billRow = await db.query('bills',
+        where: 'username = ?',
+        whereArgs: [_owner],
+        orderBy: 'id DESC',
+        limit: 1);
+    if (billRow.isEmpty) return -1;
+    final billId = billRow.first['id'] as int;
+
+    for (final item in _currentCartItems) {
+      await db.insert('bill_details', {
+        'billId': billId,
+        'productId': item.id,
+        'quantity': item.quantity,
+        'price': item.unitPrice,
+      });
+    }
+
+    final msg =
+        'Đơn #$billId • ${_currentCartItems.length} món • US \$${totalAmount.toStringAsFixed(2)}';
+    await db.insert('notifications', {
+      'billId': billId,
+      'message': msg,
+      'createdAt': createdAt,
+      'username': _owner,
+    });
+
+    await resetAfterOrder();
+
+    return billId;
   }
 }

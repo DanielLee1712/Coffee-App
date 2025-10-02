@@ -1,4 +1,5 @@
 import 'package:first_ui/login/provider/login_provider.dart';
+import 'package:first_ui/notifications/Notification_screen/Notification_screen_main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -138,7 +139,7 @@ class _HomeMainState extends State<HomeMain> {
       homeTab,
       const Center(child: Text('Yêu thích')),
       const CartPage(),
-      const Center(child: Text('Thông báo')),
+      const NotificationScreen(),
       PersonalScreen(username: username),
     ];
 

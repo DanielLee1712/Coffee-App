@@ -1,7 +1,9 @@
 import 'package:first_ui/login/provider/login_provider.dart';
+import 'package:first_ui/notifications/Notification_screen/Notification_screen_main.dart';
 import 'package:first_ui/personal/personal_screen/personal_screen_main.dart';
 import 'package:first_ui/personal/provider/edit_profile_provider.dart';
 import 'package:first_ui/personal/provider/personal_provider.dart';
+import 'package:first_ui/notifications/provider/notification_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +28,17 @@ class AppRouter {
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => PersonalProvider()),
         ChangeNotifierProvider(create: (_) => EditProfileProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProxyProvider2<LoginProvider, CartProvider,
+            NotificationProvider>(
+          create: (_) => NotificationProvider(),
+          update: (context, login, cart, previous) {
+            final notif = previous ?? NotificationProvider();
+            final username = login.currentUsername ?? 'guest';
+            notif.loadNotificationsForUser(username);
+            return notif;
+          },
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -38,6 +51,7 @@ class AppRouter {
           '/cart': (_) => const CartPage(),
           '/menu': (_) => const MenuScreen(),
           '/menu_screens': (_) => const MenuScreen(),
+          '/notifications': (_) => const NotificationScreen(),
         },
         onGenerateRoute: (settings) {
           if (settings.name == '/personal') {
