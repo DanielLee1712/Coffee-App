@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:first_ui/home/provider/home_config_provider.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class EventsListVertical extends StatelessWidget {
   const EventsListVertical({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class EventsListVertical extends StatelessWidget {
               padding: EdgeInsets.all(20),
               child: Text(
                 "Có lỗi xảy ra khi tải dữ liệu sự kiện",
-                style: TextStyle(color: Colors.red),
+                style: AppTextStyles.error,
               ),
             ),
           ),
@@ -40,7 +41,10 @@ class EventsListVertical extends StatelessWidget {
             child: Center(
               child: Padding(
                 padding: EdgeInsets.all(20),
-                child: Text("Không có sự kiện nào"),
+                child: Text(
+                  "Không có sự kiện nào",
+                  style: AppTextStyles.bodySecondary,
+                ),
               ),
             ),
           );
@@ -71,11 +75,7 @@ class EventsListVertical extends StatelessWidget {
                         padding: const EdgeInsets.all(12.0),
                         child: Text(
                           event.desc,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black87,
-                          ),
+                          style: AppTextStyles.bodyStrong,
                         ),
                       ),
                     ),

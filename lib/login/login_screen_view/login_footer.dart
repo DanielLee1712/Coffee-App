@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:first_ui/sign%20up/sign_up_screen/sign_up_screen.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class LoginFooter extends StatelessWidget {
   const LoginFooter({Key? key}) : super(key: key);
@@ -20,16 +21,7 @@ class LoginFooter extends StatelessWidget {
                 onTap: () {},
                 child: const Text(
                   "Quên mật khẩu?",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    shadows: [
-                      Shadow(
-                          offset: Offset(1, 1),
-                          blurRadius: 2,
-                          color: Colors.black54),
-                    ],
-                  ),
+                  style: AppTextStyles.link,
                 ),
               ),
             ],
@@ -37,18 +29,9 @@ class LoginFooter extends StatelessWidget {
           const SizedBox(width: 15),
           Column(
             children: <Widget>[
-              const Text(
+              Text(
                 "Bạn chưa có tài khoản?",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                  shadows: [
-                    Shadow(
-                        offset: Offset(1, 1),
-                        blurRadius: 2,
-                        color: Colors.black54),
-                  ],
-                ),
+                style: AppTextStyles.bodySecondary.c(Colors.white),
               ),
               GestureDetector(
                 onTap: () {
@@ -60,17 +43,7 @@ class LoginFooter extends StatelessWidget {
                 },
                 child: const Text(
                   "Đăng ký",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    shadows: [
-                      Shadow(
-                          offset: Offset(1, 1),
-                          blurRadius: 2,
-                          color: Colors.black54),
-                    ],
-                  ),
+                  style: AppTextStyles.link,
                 ),
               ),
             ],

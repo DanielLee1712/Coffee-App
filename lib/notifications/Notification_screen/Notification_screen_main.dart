@@ -3,6 +3,7 @@ import 'package:first_ui/notifications/Notification_screen_view/notification_det
 import 'package:first_ui/notifications/provider/notification_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
@@ -43,19 +44,43 @@ class _NotificationScreenState extends State<NotificationScreen> {
             itemCount: provider.notifications.length,
             itemBuilder: (context, index) {
               final notif = provider.notifications[index];
-              return ListTile(
-                leading: const Icon(Icons.receipt_long),
-                title: Text(notif.message),
-                subtitle: Text(notif.createdAt),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          NotificationDetailScreen(billId: notif.billId),
+              return Slidable(
+                key: ValueKey(notif.id),
+                endActionPane: ActionPane(
+                  motion: const ScrollMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: (context) {
+                        provider.removeNotification(index);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Đã xóa thông báo!'),
+                            backgroundColor: Colors.red,
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      },
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                      label: 'Xóa',
                     ),
-                  );
-                },
+                  ],
+                ),
+                child: ListTile(
+                  leading: const Icon(Icons.receipt_long),
+                  title: Text(notif.message),
+                  subtitle: Text(notif.createdAt),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            NotificationDetailScreen(billId: notif.billId),
+                      ),
+                    );
+                  },
+                ),
               );
             },
           );

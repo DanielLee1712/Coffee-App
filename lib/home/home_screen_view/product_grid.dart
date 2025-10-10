@@ -1,8 +1,10 @@
+import 'package:first_ui/home/provider/product_detail_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:first_ui/cart/provider/cart_provider.dart';
 import 'package:first_ui/cart/models/cart_item.dart';
 import 'package:first_ui/home/home_screen_view/product_detail_screen.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class ProductGridSmall extends StatelessWidget {
   final int maxItems;
@@ -93,8 +95,10 @@ class _SmallProductTile extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => ProductDetailScreen(product: product),
-            settings: const RouteSettings(name: '/product_detail'),
+            builder: (context) => ChangeNotifierProvider(
+              create: (_) => ProductDetailProvider(),
+              child: ProductDetailScreen(product: product),
+            ),
           ),
         );
       },
@@ -133,7 +137,7 @@ class _SmallProductTile extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+              style: AppTextStyles.cardTitle.s(11),
             ),
           ],
         ),

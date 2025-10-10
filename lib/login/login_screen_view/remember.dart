@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class Remember extends StatefulWidget {
   final ValueChanged<bool> onChanged;
   final bool initialValue;
+
   const Remember({
     Key? key,
     required this.onChanged,
@@ -15,6 +17,7 @@ class Remember extends StatefulWidget {
 
 class _RememberState extends State<Remember> {
   late bool _checked;
+
   @override
   void initState() {
     super.initState();
@@ -25,30 +28,27 @@ class _RememberState extends State<Remember> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          child: Checkbox(
-            value: _checked,
-            activeColor: Colors.grey,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-            ),
-            onChanged: (bool? value) {
-              setState(() {
-                _checked = value ?? false;
-                widget.onChanged(_checked);
-              });
-            },
-            side: const BorderSide(
-              color: Colors.grey,
-              width: 1.5,
-            ),
+        Checkbox(
+          value: _checked,
+          activeColor: Colors.grey,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+          onChanged: (bool? value) {
+            setState(() {
+              _checked = value ?? false;
+              widget.onChanged(_checked);
+            });
+          },
+          side: const BorderSide(
+            color: Colors.grey,
+            width: 1.5,
           ),
         ),
-        const Text("Ghi nhớ đăng nhập",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-            )),
+        Text(
+          "Ghi nhớ đăng nhập",
+          style: AppTextStyles.bodyStrong.c(Colors.white),
+        ),
       ],
     );
   }

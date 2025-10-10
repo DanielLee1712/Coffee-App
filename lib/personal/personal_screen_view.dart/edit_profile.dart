@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:first_ui/personal/provider/edit_profile_provider.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final String username;
@@ -111,9 +112,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     child: provider.loading
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text(
+                        : Text(
                             "Lưu thay đổi",
-                            style: TextStyle(fontSize: 18, color: Colors.white),
+                            style: AppTextStyles.button.s(18),
                           ),
                   ),
                 ),

@@ -4,6 +4,7 @@ import 'package:first_ui/login/provider/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 void showOrderSummaryBottomSheet(BuildContext context) {
   showModalBottomSheet(
@@ -27,10 +28,9 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'Shopping cart',
-                      style: TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold),
+                      style: AppTextStyles.pageTitle.s(20),
                     ),
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(),
@@ -101,17 +101,13 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      '${item.name} • Size ${item.size}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13.0),
-                                    ),
+                                    Text('${item.name} • Size ${item.size}',
+                                        style: AppTextStyles.bodyStrong.s(13)),
                                     Text(
                                         'Price: US \$${item.unitPrice.toStringAsFixed(2)}'),
                                     Text('Delivery fee: ${item.deliveryFee}',
-                                        style: const TextStyle(
-                                            color: Colors.orange)),
+                                        style: AppTextStyles.body
+                                            .c(Colors.orange)),
                                     const SizedBox(height: 4.0),
                                     Row(
                                       children: [
@@ -147,13 +143,10 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                                                         BorderRadius.circular(
                                                             4),
                                                   ),
-                                                  child: Text(
-                                                    '$quantity',
-                                                    style: const TextStyle(
-                                                        fontSize: 14,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
+                                                  child: Text('$quantity',
+                                                      style: AppTextStyles
+                                                          .bodyStrong
+                                                          .s(14)),
                                                 ),
                                                 IconButton(
                                                   onPressed: () => provider
@@ -176,13 +169,10 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                                 ),
                               ),
                               Text(
-                                'US \$${(item.totalPrice).toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12.0,
-                                  color: Colors.brown,
-                                ),
-                              ),
+                                  'US \$${(item.totalPrice).toStringAsFixed(2)}',
+                                  style: AppTextStyles.bodyStrong
+                                      .s(12)
+                                      .c(Colors.brown)),
                             ],
                           ),
                         ),
@@ -210,13 +200,9 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Total:',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text(
-                      'US \$${provider.totalAmount.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.brown),
-                    ),
+                    Text('Total:', style: AppTextStyles.bodyStrong.s(16)),
+                    Text('US \$${provider.totalAmount.toStringAsFixed(2)}',
+                        style: AppTextStyles.bodyStrong.c(Colors.brown).s(16)),
                   ],
                 ),
                 const SizedBox(height: 20.0),
@@ -291,14 +277,10 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                       padding: const EdgeInsets.symmetric(vertical: 15),
                     ),
                     child: Text(
-                      currentCartItems.isEmpty
-                          ? 'Không có món nào được chọn'
-                          : 'Order - US \$${provider.totalAmount.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
+                        currentCartItems.isEmpty
+                            ? 'Không có món nào được chọn'
+                            : 'Order - US \$${provider.totalAmount.toStringAsFixed(2)}',
+                        style: AppTextStyles.bodyStrong.c(Colors.white).s(16)),
                   ),
                 ),
               ],

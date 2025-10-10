@@ -1,8 +1,10 @@
+import 'package:first_ui/home/provider/product_detail_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:first_ui/cart/provider/cart_provider.dart';
 import 'package:first_ui/cart/models/cart_item.dart';
 import 'package:first_ui/home/home_screen_view/product_detail_screen.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({Key? key}) : super(key: key);
@@ -37,11 +39,7 @@ class MenuScreen extends StatelessWidget {
                     child: Text(
                       'Menu',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
+                      style: AppTextStyles.pageTitle,
                     ),
                   ),
                   const SizedBox(width: 36),
@@ -86,7 +84,10 @@ class MenuScreen extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => ProductDetailScreen(product: product),
+            builder: (_) => ChangeNotifierProvider(
+              create: (_) => ProductDetailProvider(),
+              child: ProductDetailScreen(product: product),
+            ),
             settings: const RouteSettings(name: '/product_detail'),
           ),
         );
@@ -149,22 +150,14 @@ class MenuScreen extends StatelessWidget {
                   children: [
                     Text(
                       product.name,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
+                      style: AppTextStyles.cardTitle,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       product.price,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFB8860B),
-                      ),
+                      style: AppTextStyles.price,
                     ),
                     const Spacer(),
                     if (quantity == 0)
@@ -221,11 +214,7 @@ class MenuScreen extends StatelessWidget {
                           ),
                           Text(
                             '$quantity',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
+                            style: AppTextStyles.bodyStrong,
                           ),
                           GestureDetector(
                             onTap: () {

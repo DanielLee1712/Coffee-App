@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class LoginHeader extends StatelessWidget {
   const LoginHeader({Key? key}) : super(key: key);
@@ -39,34 +40,16 @@ class LoginHeader extends StatelessWidget {
             children: <Widget>[
               Text(
                 "Coffee",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize:
-                      MediaQuery.of(context).viewInsets.bottom > 0 ? 35 : 45,
-                  fontWeight: FontWeight.bold,
-                  shadows: const [
-                    Shadow(
-                        offset: Offset(2, 2),
-                        blurRadius: 4,
-                        color: Colors.black54),
-                  ],
-                ),
+                style: MediaQuery.of(context).viewInsets.bottom > 0
+                    ? AppTextStyles.loginBrandCompact
+                    : AppTextStyles.loginBrand,
               ),
               SizedBox(
                 height: MediaQuery.of(context).viewInsets.bottom > 0 ? 15 : 30,
               ),
               const Text(
                 "Đăng nhập vào tài khoản của bạn",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  shadows: [
-                    Shadow(
-                        offset: Offset(1, 1),
-                        blurRadius: 3,
-                        color: Colors.black54),
-                  ],
-                ),
+                style: AppTextStyles.loginSubtitle,
               ),
             ],
           ),

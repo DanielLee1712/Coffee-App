@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:style_packet/app_text_styles.dart';
 import 'hide_password_sign_in.dart';
 import 'remember.dart';
 
@@ -35,7 +36,7 @@ class LoginInput extends StatelessWidget {
               controller: usernameController,
               decoration: const InputDecoration(
                 hintText: "Email hoặc Tên đăng nhập",
-                hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
+                hintStyle: AppTextStyles.inputHint,
                 border: InputBorder.none,
               ),
             ),

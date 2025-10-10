@@ -5,6 +5,7 @@ import 'package:first_ui/login/login_screen_view/login_header.dart';
 import 'package:first_ui/login/login_screen_view/login_input.dart';
 import 'package:first_ui/login/login_screen_view/login_button.dart';
 import 'package:first_ui/login/login_screen_view/login_footer.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class LoginMain extends StatefulWidget {
   const LoginMain({Key? key}) : super(key: key);
@@ -102,8 +103,7 @@ class _LoginMainState extends State<LoginMain> {
                       children: [
                         Text(
                           loginProvider.errorMessage!,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 18),
+                          style: AppTextStyles.error,
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 20),
@@ -118,7 +118,7 @@ class _LoginMainState extends State<LoginMain> {
                           ),
                           child: const Text(
                             "Thử lại",
-                            style: TextStyle(fontSize: 16, color: Colors.white),
+                            style: AppTextStyles.button,
                           ),
                         ),
                       ],

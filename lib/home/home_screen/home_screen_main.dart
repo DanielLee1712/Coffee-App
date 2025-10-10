@@ -12,6 +12,7 @@ import 'package:first_ui/home/home_screen_view/event_list.dart';
 import 'package:first_ui/home/home_screen_view/menu_screen.dart';
 import 'package:first_ui/cart/cart_screen/cart_screen_main.dart';
 import 'package:first_ui/personal/personal_screen/personal_screen_main.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class HomeMain extends StatefulWidget {
   const HomeMain({Key? key}) : super(key: key);
@@ -57,11 +58,7 @@ class _HomeMainState extends State<HomeMain> {
                     padding: const EdgeInsets.only(top: 16, bottom: 10),
                     child: Text(
                       "$eventTitleText",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF5D4037),
-                      ),
+                      style: AppTextStyles.sectionTitle,
                     ),
                   ),
                 ),
@@ -94,13 +91,7 @@ class _HomeMainState extends State<HomeMain> {
                     const SliverToBoxAdapter(
                       child: Padding(
                         padding: EdgeInsets.all(20),
-                        child: Text(
-                          'Tiện ích',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: Text('Tiện ích', style: AppTextStyles.pageTitle),
                       ),
                     ),
                     const SliverToBoxAdapter(child: Divider(height: 1)),

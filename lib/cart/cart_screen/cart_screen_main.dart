@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:first_ui/cart/provider/cart_provider.dart';
 import 'package:first_ui/cart/cart_screen_view/cart_item_widget.dart';
 import 'package:first_ui/cart/cart_screen_view/order_summary_bottom_sheet.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -40,10 +41,11 @@ class CartPage extends StatelessWidget {
                 builder: (context, provider, child) {
                   final cartItems = provider.cartItems;
                   if (cartItems.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Text(
                         'Your cart is empty!',
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                        style:
+                            AppTextStyles.bodySecondary.s(18).c(Colors.black),
                       ),
                     );
                   }
@@ -73,11 +75,7 @@ class CartPage extends StatelessWidget {
                       ),
                       child: Text(
                         'Shopping cart (${provider.totalQuantityInCart} Items) - US \$${provider.totalAmount.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: AppTextStyles.bodyStrong.s(16).c(Colors.white),
                       ),
                     ),
                   );

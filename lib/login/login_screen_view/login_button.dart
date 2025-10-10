@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:first_ui/login/provider/login_provider.dart';
 import 'package:first_ui/home/provider/home_main_provider.dart';
+import 'package:style_packet/app_colors.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class LoginButton extends StatelessWidget {
   final TextEditingController usernameController;
@@ -45,18 +47,15 @@ class LoginButton extends StatelessWidget {
                   }
                 },
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromARGB(255, 18, 142, 243),
+            backgroundColor: AppColors.brand,
             padding: const EdgeInsets.symmetric(horizontal: 110, vertical: 15),
-            textStyle: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            textStyle: AppTextStyles.button,
             elevation: 8,
             shadowColor: Colors.black.withOpacity(0.3),
           ),
           child: const Text(
             "Đăng nhập",
-            style: TextStyle(color: Colors.white),
+            style: AppTextStyles.button,
           ),
         );
       },

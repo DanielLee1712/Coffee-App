@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:first_ui/database/database_helper.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class NotificationDetailScreen extends StatelessWidget {
   final int billId;
@@ -10,9 +11,14 @@ class NotificationDetailScreen extends StatelessWidget {
     final db = await DatabaseHelper.database();
     final billRows =
         await db.query("bills", where: "id = ?", whereArgs: [billId]);
+    final bill = billRows.first;
     final detailRows = await db
         .query("bill_details", where: "billId = ?", whereArgs: [billId]);
-    return {"bill": billRows.first, "details": detailRows};
+    return {
+      "bill": billRows.first,
+      "details": detailRows,
+      "username": bill["username"],
+    };
   }
 
   @override
@@ -28,6 +34,7 @@ class NotificationDetailScreen extends StatelessWidget {
           final bill = snapshot.data!["bill"];
           final details =
               snapshot.data!["details"] as List<Map<String, dynamic>>;
+          final user = snapshot.data!["username"];
 
           return Padding(
             padding: const EdgeInsets.all(16),
@@ -36,9 +43,9 @@ class NotificationDetailScreen extends StatelessWidget {
               children: [
                 Text("Ngày tạo: ${bill["createdAt"]}"),
                 Text("Tổng tiền: \$${bill["total"]}"),
+                Text("Người mua: $user"),
                 const SizedBox(height: 20),
-                const Text("Chi tiết:",
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text("Chi tiết:", style: AppTextStyles.bodyStrong),
                 Expanded(
                   child: ListView.builder(
                     itemCount: details.length,
@@ -49,8 +56,7 @@ class NotificationDetailScreen extends StatelessWidget {
                         subtitle: Text("SL: ${item["quantity"]}"),
                         trailing: Text(
                           "\$${item["price"]}",
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                          style: AppTextStyles.price.s(16),
                         ),
                       );
                     },

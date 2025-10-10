@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:first_ui/cart/models/cart_item.dart';
 import 'package:first_ui/cart/provider/cart_provider.dart';
+import 'package:first_ui/home/provider/product_detail_provider.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final CartItem product;
@@ -14,43 +16,25 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  String _selectedChocolate = 'White Chocolate';
-  String _selectedSize = 'M';
-  int _quantity = 1;
-
   final List<String> _chocolateChoices = [
     'White Chocolate',
     'Milk Chocolate',
     'Dark Chocolate',
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _quantity = context
-        .read<CartProvider>()
-        .getItemQuantityBySize(widget.product.name, _selectedSize);
-    if (_quantity == 0) {
-      _quantity = 1;
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  double _unitPriceForSize() {
+  double _unitPriceForSize(String selectedSize) {
     final base = widget.product.priceValue;
-    if (_selectedSize == 'S') return base - 2.0;
-    if (_selectedSize == 'L') return base + 2.0;
+    if (selectedSize == 'S') return base - 2.0;
+    if (selectedSize == 'L') return base + 2.0;
     return base;
   }
 
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
-    final unitPrice = _unitPriceForSize();
+    final detailProvider = context.watch<ProductDetailProvider>();
+
+    final unitPrice = _unitPriceForSize(detailProvider.selectedSize);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -145,18 +129,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                       Text(
                         widget.product.name,
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
+                        style: AppTextStyles.pageTitle.s(28),
                       ),
                       Text(
                         widget.product.description,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[600],
-                        ),
+                        style: AppTextStyles.bodySecondary.s(16),
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -164,20 +141,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           const Icon(Icons.star,
                               color: Colors.orange, size: 20),
                           const SizedBox(width: 5),
-                          const Text(
+                          Text(
                             '4.8',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
+                            style: AppTextStyles.bodyStrong.s(16),
                           ),
                           Text(
                             ' (6,900)',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[600],
-                            ),
+                            style: AppTextStyles.bodySecondary.s(14),
                           ),
                           const Spacer(),
                           _buildInfoChip(Icons.coffee_outlined, 'Coffee'),
@@ -189,37 +159,22 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       const SizedBox(height: 10),
                       Text(
                         'Medium Roasted',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[600],
-                        ),
+                        style: AppTextStyles.bodySecondary.s(14),
                       ),
                       const SizedBox(height: 20),
                       const Text(
                         'Description',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
+                        style: AppTextStyles.sectionTitle,
                       ),
                       const SizedBox(height: 10),
                       Text(
                         widget.product.description,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[700],
-                          height: 1.5,
-                        ),
+                        style: AppTextStyles.body.s(16).copyWith(height: 1.5),
                       ),
                       const SizedBox(height: 20),
                       const Text(
                         'Choice of Chocolate',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
+                        style: AppTextStyles.sectionTitle,
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
@@ -233,11 +188,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               padding: const EdgeInsets.only(right: 10),
                               child: _buildChoiceButton(
                                 choice,
-                                _selectedChocolate == choice,
+                                detailProvider.selectedChocolate == choice,
                                 (value) {
-                                  setState(() {
-                                    _selectedChocolate = value;
-                                  });
+                                  context
+                                      .read<ProductDetailProvider>()
+                                      .selectChocolate(value);
                                 },
                               ),
                             );
@@ -247,68 +202,54 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       const SizedBox(height: 20),
                       const Text(
                         'Size',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
+                        style: AppTextStyles.sectionTitle,
                       ),
                       const SizedBox(height: 10),
                       Row(
                         children: [
-                          _buildSizeButton('S', _selectedSize == 'S', (value) {
-                            setState(() {
-                              _selectedSize = value;
-                              _quantity = context
-                                  .read<CartProvider>()
-                                  .getItemQuantityBySize(
-                                      widget.product.name, _selectedSize);
-                              if (_quantity == 0) _quantity = 1;
-                            });
-                          }),
+                          _buildSizeButton(
+                            'S',
+                            detailProvider.selectedSize == 'S',
+                            (value) {
+                              context.read<ProductDetailProvider>().selectSize(
+                                  value, cartProvider, widget.product);
+                            },
+                          ),
                           const SizedBox(width: 10),
-                          _buildSizeButton('M', _selectedSize == 'M', (value) {
-                            setState(() {
-                              _selectedSize = value;
-                              _quantity = context
-                                  .read<CartProvider>()
-                                  .getItemQuantityBySize(
-                                      widget.product.name, _selectedSize);
-                              if (_quantity == 0) _quantity = 1;
-                            });
-                          }),
+                          _buildSizeButton(
+                            'M',
+                            detailProvider.selectedSize == 'M',
+                            (value) {
+                              context.read<ProductDetailProvider>().selectSize(
+                                  value, cartProvider, widget.product);
+                            },
+                          ),
                           const SizedBox(width: 10),
-                          _buildSizeButton('L', _selectedSize == 'L', (value) {
-                            setState(() {
-                              _selectedSize = value;
-                              _quantity = context
-                                  .read<CartProvider>()
-                                  .getItemQuantityBySize(
-                                      widget.product.name, _selectedSize);
-                              if (_quantity == 0) _quantity = 1;
-                            });
-                          }),
+                          _buildSizeButton(
+                            'L',
+                            detailProvider.selectedSize == 'L',
+                            (value) {
+                              context.read<ProductDetailProvider>().selectSize(
+                                  value, cartProvider, widget.product);
+                            },
+                          ),
                           const Spacer(),
                           _buildQuantityButton(Icons.remove, () {
-                            setState(() {
-                              if (_quantity > 1) _quantity--;
-                            });
+                            context
+                                .read<ProductDetailProvider>()
+                                .decreaseQuantity();
                           }),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: Text(
-                              '$_quantity',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
+                              '${detailProvider.quantity}',
+                              style: AppTextStyles.bodyStrong.s(20),
                             ),
                           ),
                           _buildQuantityButton(Icons.add, () {
-                            setState(() {
-                              _quantity++;
-                            });
+                            context
+                                .read<ProductDetailProvider>()
+                                .increaseQuantity();
                           }),
                         ],
                       ),
@@ -321,18 +262,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             children: [
                               Text(
                                 'Price',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.grey[600],
-                                ),
+                                style: AppTextStyles.price.s(18),
                               ),
                               Text(
-                                'US \$${(unitPrice * _quantity).toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
+                                'US \$${(unitPrice * detailProvider.quantity).toStringAsFixed(2)}',
+                                style:
+                                    AppTextStyles.price.s(28).c(Colors.black),
                               ),
                             ],
                           ),
@@ -340,13 +275,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             onPressed: () {
                               cartProvider.updateCartItemQuantityBySize(
                                 widget.product,
-                                _quantity,
-                                _selectedSize,
+                                detailProvider.quantity,
+                                detailProvider.selectedSize,
                               );
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    'Đã thêm $_quantity ${widget.product.name} (Size $_selectedSize) vào giỏ hàng!',
+                                    'Đã thêm ${detailProvider.quantity} ${widget.product.name} (Size ${detailProvider.selectedSize}) vào giỏ hàng!',
                                   ),
                                   backgroundColor: const Color(0xFFB8860B),
                                   duration: const Duration(seconds: 2),

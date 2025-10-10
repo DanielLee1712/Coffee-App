@@ -31,4 +31,20 @@ class NotificationProvider with ChangeNotifier {
         .delete("notifications", where: 'username = ?', whereArgs: [username]);
     await loadNotificationsForUser(username);
   }
+
+  Future<void> removeNotification(int index) async {
+    if (index >= 0 && index < _notifications.length) {
+      final notif = _notifications[index];
+      final db = await DatabaseHelper.database();
+
+      await db.delete(
+        'notifications',
+        where: 'id = ?',
+        whereArgs: [notif.id],
+      );
+
+      _notifications.removeAt(index);
+      notifyListeners();
+    }
+  }
 }

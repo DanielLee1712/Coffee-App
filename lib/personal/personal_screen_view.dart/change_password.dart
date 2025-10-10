@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:first_ui/personal/provider/personal_provider.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   final String username;
@@ -104,8 +105,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                   child: provider.loading
                       ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text("Xác nhận",
-                          style: TextStyle(fontSize: 18, color: Colors.white)),
+                      : Text("Xác nhận", style: AppTextStyles.button.s(18)),
                 );
               },
             ),

@@ -405,6 +405,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  style_packet:
+    dependency: "direct main"
+    description:
+      path: "../style_packet"
+      relative: true
+    source: path
+    version: "1.0.0"
   synchronized:
     dependency: transitive
     description:

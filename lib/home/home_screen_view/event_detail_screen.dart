@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class EventDetailScreen extends StatelessWidget {
   final String img;
@@ -28,7 +29,7 @@ class EventDetailScreen extends StatelessWidget {
               ),
               title: const Text(
                 'Chi tiết sự kiện',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+                style: AppTextStyles.appBarTitle,
               ),
             ),
             SliverToBoxAdapter(
@@ -57,17 +58,11 @@ class EventDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Mô tả',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                    const Text('Mô tả', style: AppTextStyles.sectionTitle),
                     const SizedBox(height: 8),
                     Text(
                       desc,
-                      style: const TextStyle(fontSize: 14, height: 1.4),
+                      style: AppTextStyles.body,
                     ),
                     const SizedBox(height: 16),
                   ],

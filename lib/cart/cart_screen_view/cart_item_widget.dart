@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:first_ui/cart/provider/cart_provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:style_packet/app_text_styles.dart';
 
 class CartItemWidget extends StatelessWidget {
   final int index;
@@ -79,24 +80,22 @@ class CartItemWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('${item.name} • Size ${item.size}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
+                          style: AppTextStyles.bodyStrong.s(16)),
                       const SizedBox(height: 4),
                       Text(item.description,
-                          style:
-                              TextStyle(fontSize: 13, color: Colors.grey[700])),
+                          style: AppTextStyles.bodySecondary
+                              .s(13)
+                              .c(Colors.grey[700]!)),
                       const SizedBox(height: 4),
                       Text(
                         'US \$${item.unitPrice.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                        style: AppTextStyles.bodyStrong.s(16),
                       ),
                       const SizedBox(height: 6),
                       Row(
                         children: [
                           Text("Delivery fee ${item.deliveryFee}",
-                              style: const TextStyle(
-                                  color: Colors.orange, fontSize: 12)),
+                              style: AppTextStyles.body.s(12).c(Colors.orange)),
                           const Spacer(),
                           Row(
                             children: [
