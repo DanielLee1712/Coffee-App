@@ -28,10 +28,7 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Shopping cart',
-                      style: AppTextStyles.pageTitle.s(20),
-                    ),
+                    Text('Shopping cart', style: AppTextStyles.pageTitle.s(20)),
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(),
                       icon: const Icon(Icons.close),
@@ -103,8 +100,17 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                                   children: [
                                     Text('${item.name} • Size ${item.size}',
                                         style: AppTextStyles.bodyStrong.s(13)),
-                                    Text(
-                                        'Price: US \$${item.unitPrice.toStringAsFixed(2)}'),
+                                    FutureBuilder<double>(
+                                      future: item.getUnitPrice(),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return const Text("Đang tính giá...");
+                                        }
+                                        return Text(
+                                          'Price: US \$${snapshot.data!.toStringAsFixed(2)}',
+                                        );
+                                      },
+                                    ),
                                     Text('Delivery fee: ${item.deliveryFee}',
                                         style: AppTextStyles.body
                                             .c(Colors.orange)),
@@ -168,11 +174,20 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                                   ],
                                 ),
                               ),
-                              Text(
-                                  'US \$${(item.totalPrice).toStringAsFixed(2)}',
-                                  style: AppTextStyles.bodyStrong
-                                      .s(12)
-                                      .c(Colors.brown)),
+                              FutureBuilder<double>(
+                                future: item.getTotalPrice(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Text("...");
+                                  }
+                                  return Text(
+                                    'US \$${snapshot.data!.toStringAsFixed(2)}',
+                                    style: AppTextStyles.bodyStrong
+                                        .s(12)
+                                        .c(Colors.brown),
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ),
@@ -181,12 +196,20 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                   ),
                 ),
                 const Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Total price:'),
-                    Text('US \$${provider.subtotal.toStringAsFixed(2)}'),
-                  ],
+                FutureBuilder<double>(
+                  future: provider.getSubtotal(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Text("Subtotal: ...");
+                    }
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Total price:'),
+                        Text('US \$${snapshot.data!.toStringAsFixed(2)}'),
+                      ],
+                    );
+                  },
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,13 +220,20 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                   ],
                 ),
                 const Divider(thickness: 2.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Total:', style: AppTextStyles.bodyStrong.s(16)),
-                    Text('US \$${provider.totalAmount.toStringAsFixed(2)}',
-                        style: AppTextStyles.bodyStrong.c(Colors.brown).s(16)),
-                  ],
+                FutureBuilder<double>(
+                  future: provider.getTotalAmount(),
+                  builder: (context, snapshot) {
+                    final total = snapshot.data ?? 0;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Total:', style: AppTextStyles.bodyStrong.s(16)),
+                        Text('US \$${total.toStringAsFixed(2)}',
+                            style:
+                                AppTextStyles.bodyStrong.c(Colors.brown).s(16)),
+                      ],
+                    );
+                  },
                 ),
                 const SizedBox(height: 20.0),
                 SizedBox(
@@ -211,13 +241,15 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                   child: ElevatedButton(
                     onPressed: currentCartItems.isEmpty
                         ? null
-                        : () {
+                        : () async {
+                            final total = await provider.getTotalAmount();
+
                             showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
                                 title: const Text('Confirm order'),
                                 content: Text(
-                                  'Bạn có chắc muốn đặt ${provider.totalQuantityInCart} món với tổng US \$${provider.totalAmount.toStringAsFixed(2)}?',
+                                  'Bạn có chắc muốn đặt ${provider.totalQuantityInCart} món với tổng US \$${total.toStringAsFixed(2)}?',
                                 ),
                                 actions: [
                                   TextButton(
@@ -276,11 +308,18 @@ void showOrderSummaryBottomSheet(BuildContext context) {
                           currentCartItems.isEmpty ? Colors.grey : Colors.brown,
                       padding: const EdgeInsets.symmetric(vertical: 15),
                     ),
-                    child: Text(
-                        currentCartItems.isEmpty
-                            ? 'Không có món nào được chọn'
-                            : 'Order - US \$${provider.totalAmount.toStringAsFixed(2)}',
-                        style: AppTextStyles.bodyStrong.c(Colors.white).s(16)),
+                    child: FutureBuilder<double>(
+                      future: provider.getTotalAmount(),
+                      builder: (context, snapshot) {
+                        final total = snapshot.data ?? 0;
+                        return Text(
+                          currentCartItems.isEmpty
+                              ? 'Không có món nào được chọn'
+                              : 'Order - US \$${total.toStringAsFixed(2)}',
+                          style: AppTextStyles.bodyStrong.c(Colors.white).s(16),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],

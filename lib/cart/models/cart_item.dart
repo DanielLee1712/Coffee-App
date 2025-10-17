@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:calculator/calculator.dart';
 
 class CartItem {
   final int? id;
@@ -68,15 +69,22 @@ class CartItem {
     return double.tryParse(cleaned) ?? 0.0;
   }
 
-  double get unitPrice {
-    final base = priceValue;
-    if (size == 'S') return base - 2.0;
-    if (size == 'L') return base + 2.0;
-    return base;
+  Future<double> getUnitPrice() async {
+    final result = await Calculator.calculate(
+      priceValue.toInt(),
+      quantity,
+      size,
+    );
+    return (result['unitPrice'] as num).toDouble();
   }
 
-  double get totalPrice {
-    return unitPrice * quantity;
+  Future<double> getTotalPrice() async {
+    final result = await Calculator.calculate(
+      priceValue.toInt(),
+      quantity,
+      size,
+    );
+    return (result['totalPrice'] as num).toDouble();
   }
 
   CartItem copyWith({

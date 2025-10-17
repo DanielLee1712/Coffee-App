@@ -87,9 +87,17 @@ class CartItemWidget extends StatelessWidget {
                               .s(13)
                               .c(Colors.grey[700]!)),
                       const SizedBox(height: 4),
-                      Text(
-                        'US \$${item.unitPrice.toStringAsFixed(2)}',
-                        style: AppTextStyles.bodyStrong.s(16),
+                      FutureBuilder<double>(
+                        future: item.getUnitPrice(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Text("Đang tính giá...");
+                          }
+                          return Text(
+                            'US \$${snapshot.data!.toStringAsFixed(2)}',
+                            style: AppTextStyles.bodyStrong.s(16),
+                          );
+                        },
                       ),
                       const SizedBox(height: 6),
                       Row(

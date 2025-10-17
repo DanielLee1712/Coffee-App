@@ -29,10 +29,10 @@ class CartProvider extends ChangeNotifier {
     return total;
   }
 
-  double get subtotal {
+  Future<double> getSubtotal() async {
     double total = 0.0;
     for (var item in _currentCartItems) {
-      total += item.totalPrice;
+      total += await item.getTotalPrice();
     }
     return total;
   }
@@ -48,7 +48,10 @@ class CartProvider extends ChangeNotifier {
     return maxDeliveryFee;
   }
 
-  double get totalAmount => subtotal + totalDeliveryFee;
+  Future<double> getTotalAmount() async {
+    final subtotal = await getSubtotal();
+    return subtotal + totalDeliveryFee;
+  }
 
   Future<void> loadProductsFromDB() async {
     final db = await DatabaseHelper.database();
@@ -301,9 +304,11 @@ class CartProvider extends ChangeNotifier {
     final batch = db.batch();
     final createdAt = DateTime.now().toIso8601String();
 
+    final total = await getTotalAmount();
+
     batch.insert('bills', {
       'createdAt': createdAt,
-      'total': totalAmount,
+      'total': total,
       'username': _owner,
     });
 
@@ -317,16 +322,17 @@ class CartProvider extends ChangeNotifier {
     final billId = billRow.first['id'] as int;
 
     for (final item in _currentCartItems) {
+      final unitPrice = await item.getUnitPrice();
       await db.insert('bill_details', {
         'billId': billId,
         'productId': item.id,
         'quantity': item.quantity,
-        'price': item.unitPrice,
+        'price': unitPrice,
       });
     }
 
     final msg =
-        'Đơn #$billId • ${_currentCartItems.length} món • US \$${totalAmount.toStringAsFixed(2)}';
+        'Đơn #$billId • ${_currentCartItems.length} món • US \$${total.toStringAsFixed(2)}';
     await db.insert('notifications', {
       'billId': billId,
       'message': msg,

@@ -64,19 +64,26 @@ class CartPage extends StatelessWidget {
                   return Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: ElevatedButton(
-                      onPressed: () => showOrderSummaryBottomSheet(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.brown,
-                        padding: const EdgeInsets.symmetric(vertical: 15.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                      child: Text(
-                        'Shopping cart (${provider.totalQuantityInCart} Items) - US \$${provider.totalAmount.toStringAsFixed(2)}',
-                        style: AppTextStyles.bodyStrong.s(16).c(Colors.white),
-                      ),
+                    child: FutureBuilder<double>(
+                      future: provider.getTotalAmount(),
+                      builder: (context, snapshot) {
+                        final total = snapshot.data ?? 0.0;
+                        return ElevatedButton(
+                          onPressed: () => showOrderSummaryBottomSheet(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.brown,
+                            padding: const EdgeInsets.symmetric(vertical: 15.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                          child: Text(
+                            'Shopping cart (${provider.totalQuantityInCart} Items) - US \$${total.toStringAsFixed(2)}',
+                            style:
+                                AppTextStyles.bodyStrong.s(16).c(Colors.white),
+                          ),
+                        );
+                      },
                     ),
                   );
                 }

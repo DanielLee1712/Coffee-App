@@ -35,6 +35,8 @@ dependencies:
   sqflite_common_ffi: ^2.3.6
   style_packet: 
     path: ../style_packet
+  calculator:
+    path: ../calculator
 
 
   # The following adds the Cupertino Icons font to your application.
